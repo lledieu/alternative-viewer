@@ -86,6 +86,11 @@ document.getElementById("nav-one-back").onclick = function() {
 document.getElementById("inputvue").onchange = function() {
 	this.value = 1 + goToPage( false, this.value - 1 );
 };
+document.getElementById("inputvue").addEventListener( 'wheel', function( e ) {
+	e.preventDefault();
+
+	goToPage( true, - event.deltaY );
+});
 document.getElementById("nav-one").onclick = function() {
 	goToPage( true, +1 );
 };
@@ -117,11 +122,22 @@ document.getElementById("r-bar-nav-last").onclick = function() {
 };
 
 // Manage rotation
-document.getElementById("nav-rotate-left").onclick = function() {
-	viewer.viewport.setRotation( viewer.viewport.getRotation() - 90 );
+function setRotation( angle ) {
+	viewer.viewport.setRotation( viewer.viewport.getRotation() + angle );
+}
+document.getElementById("nav-rotate-left").onclick = function( e ) {
+	if( true == e.shiftKey ) {
+		setRotation( -45 );
+	} else {
+		setRotation( -90 );
+	}
 };
-document.getElementById("nav-rotate-right").onclick = function() {
-	viewer.viewport.setRotation( viewer.viewport.getRotation() + 90 );
+document.getElementById("nav-rotate-right").onclick = function( e ) {
+	if( true == e.shiftKey ) {
+		setRotation( +45 );
+	} else {
+		setRotation( +90 );
+	}
 };
 
 // Manage horizontal and vertical fit
@@ -197,6 +213,19 @@ document.getElementById("nav-zone").onclick = function( e ) {
 		document.body.style.cursor = "crosshair";
 	}
 }
+document.addEventListener( "keydown", function( e ) {
+	if( e.key == "Escape" ) {
+		if( true == selectionMode ) {
+			if( drag != null ) {
+				viewer.removeOverlay( drag.overlayElement );
+				drag = null;
+			}
+			selectionMode = false;
+			viewer.setMouseNavEnabled( true );
+			document.body.style.cursor = "default";
+		}
+	}
+});
 
 // Toggle preserve viewport
 document.getElementById("nav-lock").onclick = function() {
@@ -267,5 +296,10 @@ if( param_initialZoom ) {
 		});
 	});
 }
+
+// Needed for auto fade
+viewer.addControl( "navigation", { anchor: "NONE" } );
+viewer.addControl( "l-bar", { anchor: "NONE" } );
+viewer.addControl( "r-bar", { anchor: "NONE" } );
 
 }; //onload
