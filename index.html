@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>OSD Viewer</title>
+</head>
+<body>
+<h1>Visionneuse alternative basée sur OSD</h1>
+
+<p><a href="https://openseadragon.github.io/">OpenenSeadragon</a> est une visionneuse d'images écrite en javascript. Elle permet de prendre en charge le protocole <a href="https://en.wikipedia.org/wiki/International_Image_Interoperability_Framework">IIIF</a> (International Image Interoperability Framework) qui a été créé à l'initiative de plusieurs grandes bibliothèques (dont la <a href="https://api.bnf.fr/fr/api-iiif-de-recuperation-des-images-de-gallica">BnF</a>).<br/>
+Voulant essayer d'utiliser cette visionneuse, j'ai eu l'idée de faire une alternative pour la consultation des AD62 car la visionneuse qu'ils proposent sur leur site m'insupporte. Il se trouve que l'accès aux images n'est pas trop loin de la mécanique IIIF. À l'aide de 2 scripts PHP, j'ai pu rendre le site compatible au procotole IIIF (version 1.1, pour ce qui est exploité par OpenSeadragon) :
+<ul>
+<li>un script pour satisfaire l'API Image Information (retourne info.json)</li>
+<li>un script pour satisfaire l'API Image Requests (retourne une image ou un morceau d'image)</li>
+</ul>
+Quand le site passe le relais à la visionneuse officielle, il fournit deux identifiants <b>id</b> et <b>ir</b>, ce dernier n'étant pas toujours nécessaire. On fournit les mêmes infos à la visionneuse alternative et elle se débrouille avec !
+</p>
+<p>Le site des AD44 utilisant la même mécanique que celui des AD62, il peut profiter de la même visionneuse alternative.</p>
+
+Exemples :
+<ul>
+<li>AD62 3 C 15 (Enregistrement des armoiries)</li>
+<ul>
+<li>Avec la visionneuse officielle : <a href="http://archivesenligne.pasdecalais.fr/v2/ad62/visualiseur/registre.html?ir=11363&id=236409427">Go</a></li>
+<li>Avec la visionneuse alternative : <a href="javascript:fill_AD62();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
+</ul>
+<li>AD44 E 236-1 (Cartulaire des ducs de Bretagne)</li>
+<ul>
+<li>Avec la visionneuse officielle : <a href="https://archives-numerisees.loire-atlantique.fr/v2/ad44/visualiseur/registre.html?ir=10230&id=560693481">Go</a></li>
+<li>Avec la visionneuse alternative : <a href="javascript:fill_AD44();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
+</ul>
+</ul>
+
+<form action="alternative-viewer.php" method="get">
+<div>
+Site concerné :
+<select id="d" name="d">
+ <option value="AD44">AD44</option>
+ <option value="AD62" default>AD62</option>
+</select>
+<br/>
+Identifiant du lot (<b>id</b>) :
+<input id="id" type="number" name="id">
+<br/>
+Autre identifiant (optionnel, <b>ir</b>) :
+<input id="ir" type="number" name="ir">
+<br/>
+Page :
+<input id="vue" type="number" name="vue">
+<br/>
+Zoom (x,y,w,h) exprimé en pourcentages (ex.: <b>28,19,21,9</b> sur la vue <b>4</b> du document des AD44) :
+<input id="zoom" type="text" name="zoom">
+<br/>
+<input type="submit" value="Go">
+</div>
+</form>
+
+<p>Et l'aventure se poursuit avec d'autres sites d'archives qui proposent une recherche globale efficace. Le script suppose que les critèrent permettent de remonter un seul résultat, sinon le comportement est pour l'instant indéterminé. On notera que les AD34 utilisent le protocole IIIF, les AD02 le protocole Zoomify. Les AD59 et AD80 sont plus simples, elles fournissent uniquement une image et une vignette.</p>
+
+Exemples :
+<ul>
+<li>AD02 5Mi0288 (Pour la période 1668 1726) <a href="javascript:fill_AD02();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
+<li>AD34 5 MI 31/10 (partie correspondant à 3 E 81/9) <a href="javascript:fill_AD34();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
+<li>AD59 5 Mi 018 R 005 <a href="javascript:fill_AD59();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
+<li>AD80 1MI_EC_238 <a href="javascript:fill_AD80();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
+<li>AN LH/2560/60 <a href="javascript:fill_ANLH();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
+</ul>
+</ul>
+
+<form action="alternative-viewer.php" method="get">
+<div>
+Site concerné :
+<select id="f2_d" name="d">
+ <option value="AD02">AD02</option>
+ <option value="AD34">AD34</option>
+ <option value="AD59">AD59</option>
+ <option value="AD80">AD80</option>
+ <option value="ANLH">AN LH</option>
+</select>
+<br/>
+Critères de recherche (séparés par |) :
+<input id="f2_c" type="text" name="c">
+<br/>
+Page :
+<input id="f2_vue" type="number" name="vue">
+<br/>
+Zoom (x,y,w,h) exprimé en pourcentages :
+<input id="f2_zoom" type="text" name="zoom">
+<br/>
+<input type="submit" value="Go">
+</div>
+</form>
+
+<p>Pour les Archives Générales du Royaume (Belgique), il est nécessaire de fournir login et mot de passe pour pouvoir lister le contenu d'un lot. Par contre la consultation des images est possible sens session. Un lot est identifié par 2 valeurs : eadid et inventarisnr.</p>
+
+Exemple : Archives de l'Etat à Tournai - 9999/998 - 0236_000_01392_000_0_0003 
+<ul>
+<li>Résultat pré-enregistrer (pas de session) : <a href="AGR-sample.html">Go</a></li>
+<li>Avec le formulaire : <a href="javascript:fill_AGR();">Remplir le formulaire</a> (il restera à renseigner login / mot de passe et appuyer sur le bouton Go en bas du formulaire)</li>
+</ul>
+
+<form action="alternative-viewer.php" method="post">
+<div>
+<input type="hidden" name="d" value="AGR">
+eadid:
+<input id="f3_eadid" type="text" name="eadid">
+<br/>
+inventarisnr:
+<input id="f3_inventarisnr" type="text" name="inventarisnr">
+<br/>
+Page :
+<input id="f3_vue" type="number" name="vue">
+<br/>
+Zoom (x,y,w,h) exprimé en pourcentages :
+<input id="f3_zoom" type="text" name="zoom">
+<br/>
+Login / mot de passe :
+<input type="text" name="login">
+/
+<input type="password" name="passwd">
+<br/>
+<input type="submit" value="Go">
+</div>
+</form>
+
+</body>
+<script>
+function fill_AD02() {
+	document.getElementById("f2_d").value = "AD02";
+	document.getElementById("f2_c").value = "5Mi0288|1668 1726";
+	document.getElementById("f2_vue").value = "";
+	document.getElementById("f2_zoom").value = "";
+}
+
+function fill_AD34() {
+	document.getElementById("f2_d").value = "AD34";
+	document.getElementById("f2_c").value = "5 MI 31/10|3 E 81/9";
+	document.getElementById("f2_vue").value = "";
+	document.getElementById("f2_zoom").value = "";
+}
+
+function fill_AD44() {
+	document.getElementById("d").value = "AD44";
+	document.getElementById("id").value = "560693481";
+	document.getElementById("ir").value = "10230";
+	document.getElementById("vue").value = "";
+	document.getElementById("zoom").value = "";
+}
+
+function fill_AD59() {
+	document.getElementById("f2_d").value = "AD59";
+	document.getElementById("f2_c").value = "5 Mi 018 R 005";
+	document.getElementById("f2_vue").value = "";
+	document.getElementById("f2_zoom").value = "";
+}
+
+function fill_AD62() {
+	document.getElementById("d").value = "AD62";
+	document.getElementById("id").value = "236409427";
+	document.getElementById("ir").value = "";
+	document.getElementById("vue").value = "";
+	document.getElementById("zoom").value = "";
+}
+
+function fill_AD80() {
+	document.getElementById("f2_d").value = "AD80";
+	document.getElementById("f2_c").value = "1MI_EC_238";
+	document.getElementById("f2_vue").value = "";
+	document.getElementById("f2_zoom").value = "";
+}
+
+function fill_ANLH() {
+	document.getElementById("f2_d").value = "ANLH";
+	document.getElementById("f2_c").value = "LH/2560/60";
+	document.getElementById("f2_vue").value = "";
+	document.getElementById("f2_zoom").value = "";
+}
+
+function fill_AGR() {
+	document.getElementById("f3_eadid").value = "BE-A0527_712078_712454_FRE";
+	document.getElementById("f3_inventarisnr").value = "I71207871245422156";
+	document.getElementById("f3_vue").value = "";
+	document.getElementById("f3_zoom").value = "";
+}
+</script>
+</script>
+</html>

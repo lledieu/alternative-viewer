@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8">
+ <title>Alternative Viewer</title>
+ <link rel="stylesheet"
+       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+       integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
+       crossorigin="anonymous" />
+ <link rel="stylesheet" href="alternative-viewer.css">
+</head>
+<body>
+
+<div id="alternative-viewer-container">
+ <div id="loader" class="hidden"></div>
+ <div id="logo">
+  <a href="https://search.arch.be"><img src="https://search.arch.be/templates/cust-rab-website/favicon.ico" title="Archives Générales du Royaume (Belgique)"></a>
+ </div>
+
+ <div id="l-bar" class="nav-bar nav-shadow">
+  <div id="l-bar-nav-one-back" title="-1"><i class="fa fa-chevron-left" aria-hidden="true"></i></div>
+  <div id="l-bar-nav-ten-back" title="-10"><i class="fa fa-chevron-left" aria-hidden="true"></i><i class="fa fa-chevron-left" aria-hidden="true"></i></div>
+  <div id="l-bar-nav-first" title="Début du registre"><i class="fa fa-fast-backward" aria-hidden="true"></i></div>
+ </div>
+
+ <div id="navigation" class="nav-shadow">
+  <ul>
+   <li id="nav-first" class="fa fa-fast-backward" title="Début du registre">&nbsp;</li>
+   <li id="nav-ten-back" class="fa" title="-10"><span><i class="fa fa-chevron-left" aria-hidden="true"></i><i class="fa fa-chevron-left" aria-hidden="true"></i></span></li>
+   <li id="nav-one-back" class="fa fa-chevron-left" title="-1">&nbsp;</li>
+   <li class="current">
+    <input type="text" id="inputvue" autocomplete="off">
+    <span>/</span>
+    <span id="total"></span>
+   </li>
+   <li id="nav-one" class="fa fa-chevron-right" title="+1">&nbsp;</li>
+   <li id="nav-ten" class="fa" title="+10"><span><i class="fa fa-chevron-right" aria-hidden="true"></i><i class="fa fa-chevron-right" aria-hidden="true"></i></span></li>
+   <li id="nav-last" class="fa fa-fast-forward" title="Fin du registre">&nbsp;</li>
+   <li id="nav-fit-v" class="fa fa-arrows-alt-v" title="Ajuster à la hauteur">&nbsp;</li>
+   <li id="nav-fit-h" class="fa fa-arrows-alt-h" title="Ajuster à la largeur">&nbsp;</li>
+   <li id="nav-zone" class="far fa-square" title="Zoom sur une zone">&nbsp;</li>
+   <li id="nav-rotate-left" class="fa fa-undo" title="Pivoter vers la gauche">&nbsp;</li>
+   <li id="nav-rotate-right" class="fa fa-redo" title="Pivoter vers la droite">&nbsp;</li>
+   <li id="nav-lock" class="fa fa-lock" title="Verrouiller / Déverrouiller les réglages">&nbsp;</li>
+   <a id="nav-download" href="vide:" target="_blank"><li class="fa fa-download" title="Télécharger">&nbsp;</li></a>
+   <li id="nav-screen" class="fa fa-expand" title="Activer / Désactiver le mode plein écran">&nbsp;</li>
+  </ul>
+ </div>
+
+ <div id="r-bar" class="nav-bar nav-shadow">
+  <div id="r-bar-nav-one" title="+1"><i class="fa fa-chevron-right" aria-hidden="true"></i></div>
+  <div id="r-bar-nav-ten" title="+10"><i class="fa fa-chevron-right" aria-hidden="true"></i><i class="fa fa-chevron-right" aria-hidden="true"></i></div>
+  <div id="r-bar-nav-last" title="Fin du registre"><i class="fa fa-fast-forward" aria-hidden="true"></i></div>
+ </div>
+
+ <div id="alternative-viewer"></div>
+</div>
+
+</body>
+<script type="text/javascript">
+const param_tileSources = [
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0001.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0003.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0005.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0007.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0009.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0011.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0013.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0015.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0017.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0019.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0021.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0023.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0025.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0027.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0029.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0031.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0033.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0035.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0037.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0039.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0041.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0043.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0045.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0047.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0049.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0051.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0053.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0055.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0057.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0059.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0061.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0063.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0065.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0067.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0069.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0071.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0073.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0077.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0079.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0081.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0083.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0085.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0087.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0089.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0091.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0093.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0095.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0097.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0099.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0101.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0103.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0105.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0107.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0109.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0111.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0113.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0115.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0117.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0119.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0121.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0123.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0125.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0127.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0129.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0131.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0133.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0135.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0137.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0139.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0141.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0143.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0145.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0147.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0149.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0151.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0153.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0157.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0159.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0161.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0163.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0165.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0167.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0169.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0171.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0173.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0175.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0177.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0179.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0181.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0183.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0185.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0187.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0189.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0191.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0193.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0195.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0197.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0199.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0200.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0201.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0203.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0205.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0207.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0209.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0211.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0213.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0215.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0217.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0219.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0221.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0223.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0225.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0227.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0229.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0231.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0233.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0235.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0237.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0239.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0241.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0243.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0245.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0247.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0249.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0251.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0253.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0255.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0257.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0259.jp2",
+ "AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0261.jp2",
+];
+const param_initialPage = 2;
+const param_initialZoom = null;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/openseadragon@2.4/build/openseadragon/openseadragon.min.js"></script>
+<!-- jquery needed to extend OSD -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="openseadragon-zoomify.js"></script>
+<script src="openseadragon-topview.js"></script>
+<!-- -->
+<script src="alternative-viewer.js"></script>
+</html>
