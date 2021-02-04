@@ -86,11 +86,6 @@ document.getElementById("nav-one-back").onclick = function() {
 document.getElementById("inputvue").onchange = function() {
 	this.value = 1 + goToPage( false, this.value - 1 );
 };
-document.getElementById("inputvue").addEventListener( 'wheel', function( e ) {
-	e.preventDefault();
-
-	goToPage( true, - event.deltaY );
-});
 document.getElementById("nav-one").onclick = function() {
 	goToPage( true, +1 );
 };
@@ -121,6 +116,53 @@ document.getElementById("r-bar-nav-last").onclick = function() {
 	goToPage( false, -1 );
 };
 
+// Change page on wheel
+document.getElementById("inputvue").addEventListener( 'wheel', function( e ) {
+	e.preventDefault();
+
+	goToPage( true, (event.deltaY > 0) ? -1 : +1 );
+});
+document.getElementById("nav-one-back").addEventListener( 'wheel', function( e ) {
+	e.preventDefault();
+
+	goToPage( true, (event.deltaY > 0) ? -1 : +1 );
+});
+document.getElementById("nav-ten-back").addEventListener( 'wheel', function( e ) {
+	e.preventDefault();
+
+	goToPage( true, (event.deltaY > 0) ? -10 : +10 );
+});
+document.getElementById("nav-one").addEventListener( 'wheel', function( e ) {
+	e.preventDefault();
+
+	goToPage( true, (event.deltaY > 0) ? -1 : +1 );
+});
+document.getElementById("nav-ten").addEventListener( 'wheel', function( e ) {
+	e.preventDefault();
+
+	goToPage( true, (event.deltaY > 0) ? -10 : +10 );
+});
+document.getElementById("l-bar-nav-one-back").addEventListener( 'wheel', function( e ) {
+	e.preventDefault();
+
+	goToPage( true, (event.deltaY > 0) ? -1 : +1 );
+});
+document.getElementById("l-bar-nav-ten-back").addEventListener( 'wheel', function( e ) {
+	e.preventDefault();
+
+	goToPage( true, (event.deltaY > 0) ? -10 : +10 );
+});
+document.getElementById("r-bar-nav-one").addEventListener( 'wheel', function( e ) {
+	e.preventDefault();
+
+	goToPage( true, (event.deltaY > 0) ? -1 : +1 );
+});
+document.getElementById("r-bar-nav-ten").addEventListener( 'wheel', function( e ) {
+	e.preventDefault();
+
+	goToPage( true, (event.deltaY > 0) ? -10 : +10 );
+});
+
 // Manage rotation
 function setRotation( angle ) {
 	viewer.viewport.setRotation( viewer.viewport.getRotation() + angle );
@@ -139,6 +181,26 @@ document.getElementById("nav-rotate-right").onclick = function( e ) {
 		setRotation( +90 );
 	}
 };
+function setRotationOnWheel( e ) {
+	e.preventDefault();
+
+	var step = 90;
+	if( e.shiftKey ) {
+		step = 45;
+	} else if( e.ctrlKey ) {
+		step = 1;
+	}
+
+	var current = viewer.viewport.getRotation();
+	if( step != 1 ) {
+		current = Math.round( current / step ) * step;
+	}
+	var direction = event.deltaY > 0 ? -1 : +1 ;
+
+	viewer.viewport.setRotation( current + direction * step );
+}
+document.getElementById("nav-rotate-right").addEventListener( 'wheel', setRotationOnWheel );
+document.getElementById("nav-rotate-left").addEventListener( 'wheel', setRotationOnWheel );
 
 // Manage horizontal and vertical fit
 document.getElementById("nav-fit-v").onclick = function() {
