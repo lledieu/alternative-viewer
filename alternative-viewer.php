@@ -68,6 +68,9 @@ if( preg_match( '/^[0-9_A-Z]*$/', $target ) ) {
   <div id="r-bar-nav-last" title="Fin du registre"><i class="fa fa-fast-forward" aria-hidden="true"></i></div>
  </div>
 
+ <div id="nav-list-remove"><span title="Masquer la liste"><i class="fa fa-caret-square-left"></i></span></div>
+ <div id="nav-list-add" class="inactive"><span title="Afficher la liste"><i class="far fa-caret-square-right"></i></span></div>
+
  <div id="alternative-viewer"></div>
 </div>
 

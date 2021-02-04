@@ -77,6 +77,19 @@ body, #alternative-viewer {
 	right: 0;
 }
 
+/* list control */
+#nav-list-remove, #nav-list-add {
+	z-index: 5;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	font-size: 20px;
+}
+.inactive {
+	display: none !important;
+	z-index: -5 !important;
+}
+
 /* Zoom zone */
 .zone {
 	background: rgba(255, 0, 0, 0.3); 

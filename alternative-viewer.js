@@ -17,6 +17,7 @@ const viewer = OpenSeadragon({
 	sequenceMode: true,
 	preserveViewport: true,
 	showNavigator: true,
+	navigatorSizeRatio: 0.15,
 	showNavigationControl: false,
 	showSequenceControl: false,
 	showReferenceStrip: stateReferenceTrip,
@@ -307,6 +308,32 @@ document.getElementById("nav-lock").onclick = function() {
 	}
 };
 
+// Toggle ReferenceStrip and more
+document.getElementById("nav-list-remove").onclick = function( e ) {
+	viewer.removeReferenceStrip();
+	this.classList.toggle( "inactive" );
+	document.getElementById("nav-list-add").classList.toggle( "inactive" );
+	if( true == e.shiftKey ) {
+		document.getElementById("logo").classList.toggle( "inactive" );
+		document.getElementById("navigation").classList.toggle( "inactive" );
+		document.getElementById("l-bar").classList.toggle( "inactive" );
+		document.getElementById("r-bar").classList.toggle( "inactive" );
+		viewer.navigator.element.classList.toggle( "inactive" );
+	}
+};
+document.getElementById("nav-list-add").onclick = function( e ) {
+	viewer.addReferenceStrip();
+	this.classList.toggle( "inactive" );
+	document.getElementById("nav-list-remove").classList.toggle( "inactive" );
+	if( true == e.shiftKey ) {
+		document.getElementById("logo").classList.toggle( "inactive" );
+		document.getElementById("navigation").classList.toggle( "inactive" );
+		document.getElementById("l-bar").classList.toggle( "inactive" );
+		document.getElementById("r-bar").classList.toggle( "inactive" );
+		viewer.navigator.element.classList.toggle( "inactive" );
+	}
+};
+
 // Manage full screen
 document.addEventListener( "fullscreenchange", function() {
 	if( document.fullscreenElement ) {
@@ -369,5 +396,7 @@ if( param_initialZoom ) {
 viewer.addControl( "navigation", { anchor: "NONE" } );
 viewer.addControl( "l-bar", { anchor: "NONE" } );
 viewer.addControl( "r-bar", { anchor: "NONE" } );
+viewer.addControl( "nav-list-remove", { anchor: "NONE" } );
+viewer.addControl( "nav-list-add", { anchor: "NONE" } );
 
 }; //onload
