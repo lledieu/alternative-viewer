@@ -40,25 +40,25 @@ if( preg_match( '/^[0-9_A-Z]*$/', $target ) ) {
 
  <div id="navigation" class="nav-shadow">
   <ul>
-   <li id="nav-first" class="fa fa-fast-backward" title="Début du registre">&nbsp;</li>
+   <li id="nav-first" class="fa fa-fast-backward" title="Début du registre"></li>
    <li id="nav-ten-back" class="fa" title="-10"><span><i class="fa fa-chevron-left" aria-hidden="true"></i><i class="fa fa-chevron-left" aria-hidden="true"></i></span></li>
-   <li id="nav-one-back" class="fa fa-chevron-left" title="-1">&nbsp;</li>
+   <li id="nav-one-back" class="fa fa-chevron-left" title="-1"></li>
    <li class="current">
     <input type="text" id="inputvue" autocomplete="off">
     <span>/</span>
     <span id="total"></span>
    </li>
-   <li id="nav-one" class="fa fa-chevron-right" title="+1">&nbsp;</li>
+   <li id="nav-one" class="fa fa-chevron-right" title="+1"></li>
    <li id="nav-ten" class="fa" title="+10"><span><i class="fa fa-chevron-right" aria-hidden="true"></i><i class="fa fa-chevron-right" aria-hidden="true"></i></span></li>
-   <li id="nav-last" class="fa fa-fast-forward" title="Fin du registre">&nbsp;</li>
-   <li id="nav-fit-v" class="fa fa-arrows-alt-v" title="Ajuster à la hauteur">&nbsp;</li>
-   <li id="nav-fit-h" class="fa fa-arrows-alt-h" title="Ajuster à la largeur">&nbsp;</li>
-   <li id="nav-zone" class="far fa-square" title="Zoom sur une zone">&nbsp;</li>
-   <li id="nav-rotate-left" class="fa fa-undo" title="Pivoter vers la gauche">&nbsp;</li>
-   <li id="nav-rotate-right" class="fa fa-redo" title="Pivoter vers la droite">&nbsp;</li>
-   <li id="nav-lock" class="fa fa-lock" title="Verrouiller / Déverrouiller les réglages">&nbsp;</li>
-   <a id="nav-download" href="vide:" target="_blank"><li class="fa fa-download" title="Télécharger">&nbsp;</li></a>
-   <li id="nav-screen" class="fa fa-expand" title="Activer / Désactiver le mode plein écran">&nbsp;</li>
+   <li id="nav-last" class="fa fa-fast-forward" title="Fin du registre"></li>
+   <li id="nav-fit-v" class="fa fa-arrows-alt-v" title="Ajuster à la hauteur"></li>
+   <li id="nav-fit-h" class="fa fa-arrows-alt-h" title="Ajuster à la largeur"></li>
+   <li id="nav-zone" class="far fa-square" title="Zoom sur une zone"></li>
+   <li id="nav-rotate-left" class="fa fa-undo" title="Pivoter vers la gauche"></li>
+   <li id="nav-rotate-right" class="fa fa-redo" title="Pivoter vers la droite"></li>
+   <li id="nav-lock" class="fa fa-lock" title="Verrouiller / Déverrouiller les réglages"></li>
+   <a id="nav-download" href="vide:" target="_blank"><li class="fa fa-download" title="Télécharger"></li></a>
+   <li id="nav-screen" class="fa fa-expand" title="Activer / Désactiver le mode plein écran"></li>
   </ul>
  </div>
 

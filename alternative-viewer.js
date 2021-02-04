@@ -195,7 +195,7 @@ function setRotationOnWheel( e ) {
 	if( step != 1 ) {
 		current = Math.round( current / step ) * step;
 	}
-	var direction = event.deltaY > 0 ? -1 : +1 ;
+	var direction = event.deltaY > 0 ? +1 : -1 ;
 
 	viewer.viewport.setRotation( current + direction * step );
 }
@@ -264,6 +264,8 @@ new OpenSeadragon.MouseTracker({
 		selectionMode = false;
 		viewer.setMouseNavEnabled( true );
 		document.body.style.cursor = "default";
+		document.getElementById("nav-zone").classList.remove( "fa" );
+		document.getElementById("nav-zone").classList.add( "far" );
 	}
 });
 document.getElementById("nav-zone").onclick = function( e ) {
@@ -273,6 +275,8 @@ document.getElementById("nav-zone").onclick = function( e ) {
 		selectionMode = true;
 		viewer.setMouseNavEnabled( false );
 		document.body.style.cursor = "crosshair";
+		this.classList.remove( "far" );
+		this.classList.add( "fa" );
 	}
 }
 document.addEventListener( "keydown", function( e ) {
@@ -285,6 +289,8 @@ document.addEventListener( "keydown", function( e ) {
 			selectionMode = false;
 			viewer.setMouseNavEnabled( true );
 			document.body.style.cursor = "default";
+			document.getElementById("nav-zone").classList.remove( "fa" );
+			document.getElementById("nav-zone").classList.add( "far" );
 		}
 	}
 });
