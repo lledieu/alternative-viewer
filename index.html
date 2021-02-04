@@ -34,22 +34,22 @@ Exemples :
 <form action="alternative-viewer.php" method="get">
 <div>
 Site concerné :
-<select id="d" name="d">
+<select id="f1_d" name="d">
  <option value="AD44">AD44</option>
  <option value="AD62" default>AD62</option>
 </select>
 <br/>
 Identifiant du lot (<b>id</b>) :
-<input id="id" type="number" name="id">
+<input id="f1_id" type="number" name="id">
 <br/>
 Autre identifiant (optionnel, <b>ir</b>) :
-<input id="ir" type="number" name="ir">
+<input id="f1_ir" type="number" name="ir">
 <br/>
 Page :
-<input id="vue" type="number" name="vue">
+<input id="f1_vue" type="number" name="vue">
 <br/>
 Zoom (x,y,w,h) exprimé en pourcentages (ex.: <b>28,19,21,9</b> sur la vue <b>4</b> du document des AD44) :
-<input id="zoom" type="text" name="zoom">
+<input id="f1_zoom" type="text" name="zoom">
 <br/>
 <input type="submit" value="Go">
 </div>
@@ -62,6 +62,7 @@ Exemples :
 <li>AD02 5Mi0288 (Pour la période 1668 1726) <a href="javascript:fill_AD02();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 <li>AD12 3E4926 (séquence sous MN053028) <a href="javascript:fill_AD12();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 <li>AD34 5 MI 31/10 (partie correspondant à 3 E 81/9) <a href="javascript:fill_AD34();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
+<li>AD48 (EC) EDT 125 GG 1 (Pour la période 1692-1710) <a href="javascript:fill_AD48();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 <li>AD59 5 Mi 018 R 005 <a href="javascript:fill_AD59();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 <li>AD80 1MI_EC_238 <a href="javascript:fill_AD80();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 <li>AN LH/2560/60 <a href="javascript:fill_ANLH();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
@@ -75,6 +76,7 @@ Site concerné :
  <option value="AD02">AD02</option>
  <option value="AD12">AD12</option>
  <option value="AD34">AD34</option>
+ <option value="AD48">AD48</option>
  <option value="AD59">AD59</option>
  <option value="AD80">AD80</option>
  <option value="ANLH">AN LH</option>
@@ -82,6 +84,15 @@ Site concerné :
 <br/>
 Critères de recherche (séparés par |) :
 <input id="f2_c" type="text" name="c">
+<br/>
+Type (pour AD48) :
+<select id="f2_t" name="t">
+ <option value=""></option>
+ <option value="EC">État-Civil</option>
+ <option value="CON">Contrôle</option>
+ <option value="ENR">Enregistrement</option>
+ <option value="RM">Registre Matricule</option>
+</select>
 <br/>
 Page :
 <input id="f2_vue" type="number" name="vue">
@@ -130,6 +141,7 @@ Login / mot de passe :
 function fill_AD02() {
 	document.getElementById("f2_d").value = "AD02";
 	document.getElementById("f2_c").value = "5Mi0288|1668 1726";
+	document.getElementById("f2_t").value = "";
 	document.getElementById("f2_vue").value = "";
 	document.getElementById("f2_zoom").value = "";
 }
@@ -137,6 +149,7 @@ function fill_AD02() {
 function fill_AD12() {
 	document.getElementById("f2_d").value = "AD12";
 	document.getElementById("f2_c").value = "3E4926|MN053028";
+	document.getElementById("f2_t").value = "";
 	document.getElementById("f2_vue").value = "";
 	document.getElementById("f2_zoom").value = "";
 }
@@ -144,36 +157,47 @@ function fill_AD12() {
 function fill_AD34() {
 	document.getElementById("f2_d").value = "AD34";
 	document.getElementById("f2_c").value = "5 MI 31/10|3 E 81/9";
+	document.getElementById("f2_t").value = "";
 	document.getElementById("f2_vue").value = "";
 	document.getElementById("f2_zoom").value = "";
 }
 
 function fill_AD44() {
-	document.getElementById("d").value = "AD44";
-	document.getElementById("id").value = "560693481";
-	document.getElementById("ir").value = "10230";
-	document.getElementById("vue").value = "";
-	document.getElementById("zoom").value = "";
+	document.getElementById("f1_d").value = "AD44";
+	document.getElementById("f1_id").value = "560693481";
+	document.getElementById("f1_ir").value = "10230";
+	document.getElementById("f1_vue").value = "";
+	document.getElementById("f1_zoom").value = "";
+}
+
+function fill_AD48() {
+	document.getElementById("f2_d").value = "AD48";
+	document.getElementById("f2_c").value = "EDT 125 GG 1|1692-1710";
+	document.getElementById("f2_t").value = "EC";
+	document.getElementById("f2_vue").value = "";
+	document.getElementById("f2_zoom").value = "";
 }
 
 function fill_AD59() {
 	document.getElementById("f2_d").value = "AD59";
 	document.getElementById("f2_c").value = "5 Mi 018 R 005";
+	document.getElementById("f2_t").value = "";
 	document.getElementById("f2_vue").value = "";
 	document.getElementById("f2_zoom").value = "";
 }
 
 function fill_AD62() {
-	document.getElementById("d").value = "AD62";
-	document.getElementById("id").value = "236409427";
-	document.getElementById("ir").value = "";
-	document.getElementById("vue").value = "";
-	document.getElementById("zoom").value = "";
+	document.getElementById("f1_d").value = "AD62";
+	document.getElementById("f1_id").value = "236409427";
+	document.getElementById("f1_ir").value = "";
+	document.getElementById("f1_vue").value = "";
+	document.getElementById("f1_zoom").value = "";
 }
 
 function fill_AD80() {
 	document.getElementById("f2_d").value = "AD80";
 	document.getElementById("f2_c").value = "1MI_EC_238";
+	document.getElementById("f2_t").value = "";
 	document.getElementById("f2_vue").value = "";
 	document.getElementById("f2_zoom").value = "";
 }
@@ -181,6 +205,7 @@ function fill_AD80() {
 function fill_ANLH() {
 	document.getElementById("f2_d").value = "ANLH";
 	document.getElementById("f2_c").value = "LH/2560/60";
+	document.getElementById("f2_t").value = "";
 	document.getElementById("f2_vue").value = "";
 	document.getElementById("f2_zoom").value = "";
 }
