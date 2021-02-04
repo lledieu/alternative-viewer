@@ -13,5 +13,5 @@ $s_filter = "href=\"\/ark:\/$ark\/([^\"]*\/dao[^\/]*)\/";
 // Zomify
 $t_mode = "Zoomify";
 $t_base = "$base/ark:/$ark/";
-$z_base = "http://hatch-nowm.vtech.fr";
+$z_base = "https://hatch-nowm.vtech.fr";
 ?>
