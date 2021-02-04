@@ -55,11 +55,12 @@ Zoom (x,y,w,h) exprimé en pourcentages (ex.: <b>28,19,21,9</b> sur la vue <b>4<
 </div>
 </form>
 
-<p>Et l'aventure se poursuit avec d'autres sites d'archives qui proposent une recherche globale efficace. Le script suppose que les critèrent permettent de remonter un seul résultat, sinon le comportement est pour l'instant indéterminé. On notera que les AD34 utilisent le protocole IIIF, les AD02 le protocole Zoomify. Les AD59 et AD80 sont plus simples, elles fournissent uniquement une image et une vignette.</p>
+<p>Et l'aventure se poursuit avec d'autres sites d'archives qui proposent une recherche globale efficace. Le script suppose que les critèrent permettent de remonter un seul résultat, sinon le comportement est pour l'instant indéterminé. On notera que les AD34 utilisent le protocole IIIF, les AD02 et AD12 le protocole Zoomify. Les AD59 et AD80 sont plus simples, elles fournissent uniquement une image et une vignette.</p>
 
 Exemples :
 <ul>
 <li>AD02 5Mi0288 (Pour la période 1668 1726) <a href="javascript:fill_AD02();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
+<li>AD12 3E4926 (séquence sous MN053028) <a href="javascript:fill_AD12();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 <li>AD34 5 MI 31/10 (partie correspondant à 3 E 81/9) <a href="javascript:fill_AD34();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 <li>AD59 5 Mi 018 R 005 <a href="javascript:fill_AD59();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 <li>AD80 1MI_EC_238 <a href="javascript:fill_AD80();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
@@ -72,6 +73,7 @@ Exemples :
 Site concerné :
 <select id="f2_d" name="d">
  <option value="AD02">AD02</option>
+ <option value="AD12">AD12</option>
  <option value="AD34">AD34</option>
  <option value="AD59">AD59</option>
  <option value="AD80">AD80</option>
@@ -128,6 +130,13 @@ Login / mot de passe :
 function fill_AD02() {
 	document.getElementById("f2_d").value = "AD02";
 	document.getElementById("f2_c").value = "5Mi0288|1668 1726";
+	document.getElementById("f2_vue").value = "";
+	document.getElementById("f2_zoom").value = "";
+}
+
+function fill_AD12() {
+	document.getElementById("f2_d").value = "AD12";
+	document.getElementById("f2_c").value = "3E4926|MN053028";
 	document.getElementById("f2_vue").value = "";
 	document.getElementById("f2_zoom").value = "";
 }

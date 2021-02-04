@@ -1,8 +1,9 @@
 <?php
 
-// Zoomify
+echo "/* -- Zoomify -- */\n";
 
-$url = "$t_base$id_notice/daogrp/0";
+$url = "$t_base$id_notice/0";
+echo "/* URL STEP 1 : $url */\n";
 curl_setopt( $ch, CURLOPT_URL, $url );
 
 $page = curl_exec( $ch );
@@ -12,6 +13,7 @@ if( $page === false ) {
 } else {
 	$url = preg_filter( '/.*Binocle\({"source":"([^"]*.json).*/s', '$1', $page );
 	$url = preg_replace( '/\\\\/', '', $url );
+	echo "/* URL STEP 2 : $url */\n";
 
 	curl_setopt( $ch, CURLOPT_URL, $url );
 
@@ -24,9 +26,9 @@ if( $page === false ) {
 	} else {
 		$out = json_decode( $json, true )["items"];
 		foreach( $out as $s ) {
-			echo " \"https://hatch.vtech.fr//cgi-bin/iipsrv.fcgi?zoomify=".$s["source"]."/ImageProperties.xml\",\n";
+			echo " \"$z_base/cgi-bin/iipsrv.fcgi?zoomify=".$s["source"]."/ImageProperties.xml\",\n";
 		}
-		/* N.B.: More usefull data inside => batch thumb downloadable permalink */
+		/* N.B.: Some usefull data inside => batch thumb downloadable permalink */
 	}
 
 }
