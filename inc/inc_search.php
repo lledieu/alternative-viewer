@@ -37,7 +37,7 @@ if( $page === false ) {
 } else {
 	$id_notice = preg_filter( "/.*${s_filter}.*/s", '$1', $page );
 
-	if( $s_filter_count ) {
+	if( isset( $s_filter_count ) ) {
 		$size = preg_filter( "/.*${s_filter_count}.*/s", '$1', $page );
 		$size--;
 	}

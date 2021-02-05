@@ -1,1 +1,3 @@
 /check_diff.sh
+/.diffignore
+.*.swp

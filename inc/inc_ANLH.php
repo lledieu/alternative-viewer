@@ -5,7 +5,7 @@ curl_setopt( $ch, CURLOPT_URL, $url );
 
 $page = curl_exec( $ch );
 
-if( $jpage === false ) {
+if( $page === false ) {
 	echo "/*\n";
 	echo curl_error( $ch )."\n";
 	echo "*/\n";
