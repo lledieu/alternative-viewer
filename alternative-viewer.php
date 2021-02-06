@@ -1,4 +1,5 @@
 <?php
+include ( './inc/inc_optional.php' );
 
 function get_param( $name ) {
 	if( isset( $_GET[ $name ] ) ) {
@@ -9,7 +10,7 @@ function get_param( $name ) {
 }
 
 $target = get_param( "d" );
-if( preg_match( '/^[0-9_A-Z]*$/', $target ) ) {
+if( preg_match( '/^[0-9_A-Za-z-]*$/', $target ) ) {
 	require( "./config/config_$target.php" );
 }
 
