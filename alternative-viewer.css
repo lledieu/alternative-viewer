@@ -89,7 +89,7 @@ body, #alternative-viewer {
 	display: none !important;
 	z-index: -5 !important;
 }
-#nav-list-remove {
+#nav-list-remove>span {
 	color: white;
 }
 
