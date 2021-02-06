@@ -66,6 +66,7 @@ Exemples :
 <li>AD59 5 Mi 018 R 005 <a href="javascript:fill_AD59();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 <li>AD80 1MI_EC_238 <a href="javascript:fill_AD80();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 <li>AN LH/2560/60 <a href="javascript:fill_ANLH();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
+<li>AM Valenciennes MS_815 <a href="javascript:fill_AMV();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 </ul>
 </ul>
 
@@ -80,6 +81,7 @@ Site concerné :
  <option value="AD59">AD59</option>
  <option value="AD80">AD80</option>
  <option value="ANLH">AN LH</option>
+ <option value="BMV">BM Valenciennes</option>
 </select>
 <br/>
 Critères de recherche (séparés par |) :
@@ -205,6 +207,14 @@ function fill_AD80() {
 function fill_ANLH() {
 	document.getElementById("f2_d").value = "ANLH";
 	document.getElementById("f2_c").value = "LH/2560/60";
+	document.getElementById("f2_t").value = "";
+	document.getElementById("f2_vue").value = "";
+	document.getElementById("f2_zoom").value = "";
+}
+
+function fill_AMV() {
+	document.getElementById("f2_d").value = "BMV";
+	document.getElementById("f2_c").value = "B_596066101_MS_GEN/MS_0815";
 	document.getElementById("f2_t").value = "";
 	document.getElementById("f2_vue").value = "";
 	document.getElementById("f2_zoom").value = "";
