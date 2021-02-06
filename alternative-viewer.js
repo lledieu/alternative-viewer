@@ -21,6 +21,7 @@ const viewer = OpenSeadragon({
 	showNavigationControl: false,
 	showSequenceControl: false,
 	showReferenceStrip: stateReferenceTrip,
+	maxZoomPixelRatio: 5,
 	initialPage: param_initialPage,
 	tileSources: param_tileSources
 });

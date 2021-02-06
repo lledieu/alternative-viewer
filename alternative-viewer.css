@@ -89,6 +89,9 @@ body, #alternative-viewer {
 	display: none !important;
 	z-index: -5 !important;
 }
+#nav-list-remove {
+	color: white;
+}
 
 /* Zoom zone */
 .zone {
