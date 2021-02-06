@@ -115,3 +115,9 @@ body, #alternative-viewer {
 .hidden {
 	display: none;
 }
+
+.pagenum {
+	font-size: 15px;
+	color: white;
+	transform: translate(-110%, 0);
+}

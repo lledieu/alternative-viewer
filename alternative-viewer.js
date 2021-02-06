@@ -399,4 +399,19 @@ viewer.addControl( "r-bar", { anchor: "NONE" } );
 viewer.addControl( "nav-list-remove", { anchor: "NONE" } );
 viewer.addControl( "nav-list-add", { anchor: "NONE" } );
 
+// Add page number
+viewer.addHandler( 'tile-loaded', function( e ) {
+	for( const [id, v] of Object.entries( viewer.referenceStrip.miniViewers ) ) {
+		var pagenum = 1 + parseInt( id.replace( /^.*-/, '' ) );
+		var page_id = id + "-page";
+		if( !v.getOverlayById( page_id ) ) {
+			var div = document.createElement( 'div' );
+			div.id = page_id;
+			div.classList.add( "pagenum" );
+			div.appendChild( document.createTextNode( pagenum ) );
+			v.addOverlay( div, new OpenSeadragon.Point( 0, 0) );
+		}
+	}
+})
+
 }; //onload
