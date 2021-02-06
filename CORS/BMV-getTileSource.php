@@ -30,6 +30,8 @@ if( preg_match( '/.dzi$/', $dZM ) ) {
 
 	echo $json;
 } else {
+	header('Content-Type: image/jpeg');
+
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, false );
 	curl_setopt( $ch, CURLOPT_URL, "https://patrimoine-numerique.ville-valenciennes.fr$dZM" );
 
