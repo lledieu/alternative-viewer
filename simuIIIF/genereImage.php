@@ -68,14 +68,16 @@ if( isset($_GET['p']) ) {
 $ch = curl_init( $url );
 
 curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
-curl_setopt( $ch, CURLOPT_COOKIESESSION, true);
-curl_setopt( $ch, CURLOPT_COOKIEJAR, "");
-curl_setopt( $ch, CURLOPT_COOKIEFILE, "");
+curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, true );
+//curl_setopt( $ch, CURLOPT_COOKIESESSION, true);
+//curl_setopt( $ch, CURLOPT_COOKIEJAR, "");
+//curl_setopt( $ch, CURLOPT_COOKIEFILE, "");
+curl_setopt( $ch, CURLOPT_COOKIELIST, "ALL");
+curl_setopt( $ch, CURLOPT_HEADER, false);
 
 curl_setopt( $ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] );
-curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
-curl_setopt( $ch, CURLOPT_MAXREDIRS, 1 );
+curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, false );
+//curl_setopt( $ch, CURLOPT_MAXREDIRS, 1 );
 
 $page = curl_exec( $ch );
 
