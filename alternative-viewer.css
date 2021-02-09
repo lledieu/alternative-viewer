@@ -16,6 +16,15 @@ body, #alternative-viewer {
 #logo img {
 	max-width: 100px;
 }
+#logo span {
+	vertical-align: top;
+	margin-left: 5px;
+	display: inline-block;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	max-width: 25vw;
+}
 
 /* Top nav bar */
 .nav-shadow {
@@ -54,10 +63,6 @@ body, #alternative-viewer {
 .current span {
 	font-size: 15px;
 }
-#nav-download, #nav-download:hover, #nav-dowload:focus, #nav-dowload:active {
-	text-decoration: none;
-	color: inherit;
-}
 
 /* Lateral nav bar */
 .nav-bar {
@@ -89,13 +94,18 @@ body, #alternative-viewer {
 	display: none !important;
 	z-index: -5 !important;
 }
-#nav-list-remove>span {
-	color: white;
+#nav-list-remove {
+	color: green;
 }
 
 /* Zoom zone */
 .zone {
 	background: rgba(255, 0, 0, 0.3); 
+}
+
+/* Highlight */
+.highlight {
+	border: 2px solid green;
 }
 
 /* Manager loader */
@@ -123,4 +133,18 @@ body, #alternative-viewer {
 	font-size: 15px;
 	color: white;
 	transform: translate(-110%, 0);
+}
+
+/* Link without decoration */
+a.flat, a.flat:hover, a.flat:focus, .flat:active, .flat:visited {
+	text-decoration: none;
+	color: inherit;
+}
+
+/* Github */
+#github {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	z-index: 5;
 }

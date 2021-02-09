@@ -9,6 +9,11 @@ function get_param( $name ) {
 	}
 }
 
+function file_with_md5( $filename ) {
+	$md5 = md5_file( $filename );
+	return "$filename?md5=$md5";
+}
+
 $target = get_param( "d" );
 if( preg_match( '/^[0-9_A-Za-z-]*$/', $target ) ) {
 	require( "./config/config_$target.php" );
@@ -23,15 +28,13 @@ if( preg_match( '/^[0-9_A-Za-z-]*$/', $target ) ) {
        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
        integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
        crossorigin="anonymous" />
- <link rel="stylesheet" href="alternative-viewer.css">
+ <link rel="stylesheet" href="<?php echo file_with_md5( "alternative-viewer.css" ); ?>">
 </head>
 <body>
 
 <div id="alternative-viewer-container">
  <div id="loader" class="hidden"></div>
- <div id="logo">
-  <a href="<?php echo $base; ?>"><img src="<?php echo $logo; ?>" title="<?php echo $title; ?>"></a>
- </div>
+ <div id="logo"></div>
 
  <div id="l-bar" class="nav-bar nav-shadow">
   <div id="l-bar-nav-one-back" title="-1"><i class="fa fa-chevron-left" aria-hidden="true"></i></div>
@@ -58,7 +61,8 @@ if( preg_match( '/^[0-9_A-Za-z-]*$/', $target ) ) {
    <li id="nav-rotate-left" class="fa fa-undo" title="Pivoter vers la gauche"></li>
    <li id="nav-rotate-right" class="fa fa-redo" title="Pivoter vers la droite"></li>
    <li id="nav-lock" class="fa fa-lock" title="Verrouiller / Déverrouiller les réglages"></li>
-   <a id="nav-download" href="vide:" target="_blank"><li class="fa fa-download" title="Télécharger"></li></a>
+   <a id="nav-download" href="vide:" target="_blank" class="flat"><li class="fa fa-download" title="Télécharger"></li></a>
+   <a id="nav-permalink" href="vide:" target="_blank" class="flat"><li class="fa fa-link" title="Lien pérenne"></li></a>
    <li id="nav-screen" class="fa fa-expand" title="Activer / Désactiver le mode plein écran"></li>
   </ul>
  </div>
@@ -69,45 +73,28 @@ if( preg_match( '/^[0-9_A-Za-z-]*$/', $target ) ) {
   <div id="r-bar-nav-last" title="Fin du registre"><i class="fa fa-fast-forward" aria-hidden="true"></i></div>
  </div>
 
- <div id="nav-list-remove"><span title="Masquer la liste"><i class="fa fa-caret-square-left"></i></span></div>
- <div id="nav-list-add" class="inactive"><span title="Afficher la liste"><i class="far fa-caret-square-right"></i></span></div>
+ <div id="nav-list-remove" class="inactive"><span title="Masquer la liste"><i class="fa fa-caret-square-left"></i></span></div>
+ <div id="nav-list-add"><span title="Afficher la liste"><i class="far fa-caret-square-right"></i></span></div>
 
  <div id="alternative-viewer"></div>
+
+ <div id="github"><a href="https://github.com/lledieu/alternative-viewer" class="flat" title="alternative-viewer on Github"><i class="fab fa-github"></i></a></div>
 </div>
 
 </body>
 <script type="text/javascript">
-const param_tileSources = [
 <?php
 
-	// Init curl
-	$ch = curl_init();
-
-	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-	curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
-	curl_setopt( $ch, CURLOPT_COOKIESESSION, true);
-	curl_setopt( $ch, CURLOPT_COOKIEJAR, "");
-	curl_setopt( $ch, CURLOPT_COOKIEFILE, "");
-
-	curl_setopt( $ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] );
-	curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
-	curl_setopt( $ch, CURLOPT_MAXREDIRS, 1 );
-
-	require( "./inc/inc_${mode1}.php" );
-
-?>
-];
-<?php
+// Init data for JSON output
+$data = array ();
 
 // Initial Page
 $vue = get_param( "vue" );
-if( !is_numeric( $vue ) ) {
+if( !is_numeric( $vue ) || $vue < 1 ) {
+	echo "/* Invalid vue param : $vue */\n";
 	$vue = 1;
 }
-if( $vue > sizeof( $out ) ) {
-	$vue = sizeof( $out );
-}
-echo "const param_initialPage = ".($vue - 1).";\n";
+$data["current-index"] = $vue - 1;
 
 // Initial zoom
 $zoom = get_param( "zoom" );
@@ -118,20 +105,50 @@ if( $zoom != "" ) {
 	    is_numeric($rz[1]) && $rz[1] >= 0 && $rz[1] <= 100 &&
 	    is_numeric($rz[2]) && $rz[2] >= 0 && $rz[2] <= 100 &&
 	    is_numeric($rz[3]) && $rz[3] >= 0 && $rz[3] <= 100 ) {
-		echo "const param_initialZoom = { x: ".($rz[0]/100).", y: ".($rz[1]/100).", w: ".($rz[2]/100).", h: ".($rz[3]/100)." };\n";
+		$data["initialZoom"] = array( 
+			"x" => ($rz[0]/100),
+			"y" => ($rz[1]/100),
+			"w" => ($rz[2]/100),
+			"h" => ($rz[3]/100)
+		);
 	} else {
-		echo "const param_initialZoom = null;\n";
+		echo "/* Invalid zoom param : $zoom */\n";
 	}
-} else {
-	echo "const param_initialZoom = null;\n";
 }
+
+// Init curl
+$ch = curl_init();
+curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+if( isset( $ssl ) ) {
+	curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, $ssl );
+} else {
+	curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, true );
+}
+curl_setopt( $ch, CURLOPT_COOKIESESSION, true);
+curl_setopt( $ch, CURLOPT_COOKIEJAR, "");
+curl_setopt( $ch, CURLOPT_COOKIEFILE, "");
+curl_setopt( $ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] );
+curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+curl_setopt( $ch, CURLOPT_MAXREDIRS, 1 );
+
+require( "./inc/inc_${step1}.php" );
+
+// Common checks
+if( $data["current-index"] >= count( $data["tileSources"] ) ) {
+	echo "/* Invalid current-index (".$data["current-index"].") > count (".count( $data["tileSources"] ).") */\n";
+	$data["current-index"] = 0;
+}
+
+// Export data as JSON
+echo "var manifest = ".json_encode( $data ).";\n";
+
 ?>
 </script>
 <script src="https://cdn.jsdelivr.net/npm/openseadragon@2.4/build/openseadragon/openseadragon.min.js"></script>
 <!-- jquery needed to extend OSD -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-<script src="openseadragon-zoomify.js"></script>
-<script src="openseadragon-topview.js"></script>
+<script src="<?php echo file_with_md5( "openseadragon-zoomify.js" ); ?>"></script>
+<script src="<?php echo file_with_md5( "openseadragon-topview.js" ); ?>"></script>
 <!-- -->
-<script src="alternative-viewer.js"></script>
+<script src="<?php echo file_with_md5( "alternative-viewer.js" ); ?>"></script>
 </html>

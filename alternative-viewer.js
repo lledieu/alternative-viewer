@@ -1,15 +1,16 @@
 /*
  *  alternative-viewer
  *
- *  params :
- *   param_initialPage : initial page index
- *   param_tileSources : tileSources array
- *   param_InitialZoom : null / {x, y, w, h}
+ *  params : manifest
+ *            - tileSources : array
+ *            - logo : string
+ *            - title : string
+ *            - home : string
+ *            - current-index : int
+ *            - initialZoom (optional) : {x, y, w, h}
  */
 
 window.onload = function() {
-
-var stateReferenceTrip = true;
 
 const viewer = OpenSeadragon({
 	id: "alternative-viewer",
@@ -20,11 +21,31 @@ const viewer = OpenSeadragon({
 	navigatorSizeRatio: 0.15,
 	showNavigationControl: false,
 	showSequenceControl: false,
-	showReferenceStrip: stateReferenceTrip,
 	maxZoomPixelRatio: 5,
-	initialPage: param_initialPage,
-	tileSources: param_tileSources
+	initialPage: manifest["current-index"],
+	tileSources: manifest.tileSources
 });
+
+// Init logo
+function init_logo() {
+	var logo = document.getElementById("logo");
+
+	var img = document.createElement( 'img' );
+	img.src = manifest.logo;
+
+	var a = document.createElement( 'a' );
+	a.href = manifest.home;
+	a.setAttribute( "title", manifest.title );
+	a.appendChild( img );
+
+	logo.appendChild( a );
+
+	var span = document.createElement( 'span' );
+	span.setAttribute( "title", manifest.desc );
+	span.appendChild( document.createTextNode( manifest.desc ) );
+	logo.appendChild( span );
+}
+init_logo();
 
 // Toggle shadowing
 document.getElementById("navigation").onmouseover = function() {
@@ -49,7 +70,7 @@ document.getElementById("r-bar").onmouseleave = function() {
 };
 
 // Page control
-document.getElementById("total").textContent = param_tileSources.length;
+document.getElementById("total").textContent = manifest.tileSources.length;
 
 document.getElementById("inputvue").value = viewer.currentPage() + 1;
 viewer.addHandler( 'page', function( e ) {
@@ -324,6 +345,7 @@ document.getElementById("nav-list-remove").onclick = function( e ) {
 };
 document.getElementById("nav-list-add").onclick = function( e ) {
 	viewer.addReferenceStrip();
+	init_add_page();
 	this.classList.toggle( "inactive" );
 	document.getElementById("nav-list-remove").classList.toggle( "inactive" );
 	if( true == e.shiftKey ) {
@@ -364,34 +386,83 @@ viewer.world.addHandler( 'add-item', function(addItemEvent ) {
 	});
 });
 
-// Manage download link
+// Manage download link and permalink
+document.getElementById("nav-permalink")["_url"] =  "" ;
+var status_permalink = { 'i': -1, 'xhr': new XMLHttpRequest() };
 viewer.addHandler( 'tile-loaded', function( e ) {
-	//console.log( e );
+	//console.log( e, manifest );
+
+	var index = e.eventSource._sequenceIndex;
+	var data = manifest.sources[index];
+
 	var src = e.eventSource.source ;
-	if( src.hasOwnProperty('@context') ) {
+	if( src.hasOwnProperty('@context') ) { // IIIF
 		document.getElementById("nav-download").href =  src['@id'] + "/full/full/0/native." + src.tileFormat ;
 	} else if( src.url ) {
 		document.getElementById("nav-download").href =  src.url ;
+	} else if( data.download ) {
+		document.getElementById("nav-download").href =  data.download ;
 	} else {
-/* Pour AD02		
-https://archives.aisne.fr/archive/download?file=https://hatch.vtech.fr/cgi-bin/iipsrv.fcgi?FPY=1%26CSV=JPG%26FIF=
-/home/httpd/ad02/data/files/images/FRAD002_EC/FRAD002_5Mi0288/FRAD002_5Mi0288_1480.jpg
-*/
-		document.getElementById("nav-download").href =  "TODO:" ;
+		document.getElementById("nav-download").href =  'TODO:';
+	}
+
+	// Permalink
+	if( data.permalink ) {
+		document.getElementById("nav-permalink").href = data.permalink;
+	} else if( index != status_permalink.i ) {
+		var url = manifest.ajax_pl;
+		if( url ) {
+			const vars = [...url.matchAll( /{([^}]*)}/g )];
+			vars.forEach( e => url = url.replace( e[0], data[e[1]] ) );
+
+			xhr = status_permalink.xhr;
+			xhr.onreadystatechange = function() {
+				if( xhr.readyState == 4 ) {
+					if( xhr.status == 200 ) {
+						if( index == status_permalink.i ) {
+							document.getElementById("nav-permalink").href = xhr.responseText ;
+							data.permalink = xhr.responseText;
+						}
+					} else {
+						console.log( 'fail' );
+						status_permalink.i = -1;
+					}
+				}
+			};
+			xhr.open( 'GET', url, true );
+			xhr.send( null );
+			status_permalink.i = index;
+			document.getElementById("nav-permalink").href =  "loading:" ;
+		}
 	}
 });
 
 // Manage initial zoom
-if( param_initialZoom ) {
+if( manifest.initialZoom ) {
 	viewer.world.addOnceHandler( 'add-item', function(addItemEvent ) {
 		var tiledImage = addItemEvent.item;
 		tiledImage.addOnceHandler('fully-loaded-change', function(fullyLoadedChangeEvent) {
 			var zone = document.createElement( 'div' );
-			viewer.addOverlay( zone, new OpenSeadragon.Rect( param_initialZoom.x, param_initialZoom.y, param_initialZoom.w, param_initialZoom.h ) );
+			viewer.addOverlay( zone, new OpenSeadragon.Rect( manifest.initialZoom.x, manifest.initialZoom.y, manifest.initialZoom.w, manifest.initialZoom.h ) );
 			viewer.viewport.fitBoundsWithConstraints( viewer.getOverlayById( zone ).getBounds( viewer.viewport ) );
 		});
 	});
 }
+
+// Manage initial highlight
+/*
+if( param_initialHighlight ) {
+	viewer.world.addOnceHandler( 'add-item', function(addItemEvent ) {
+		var tiledImage = addItemEvent.item;
+		tiledImage.addOnceHandler('fully-loaded-change', function(fullyLoadedChangeEvent) {
+			var zone = document.createElement( 'div' );
+			zone.className = "highlight";
+			zone.setAttribute( "title", "Message" );
+			viewer.addOverlay( zone, new OpenSeadragon.Rect( param_initialHighlight.x, param_initialHighlight.y, param_initialHighlight.w, param_initialHighlight.h ) );
+		});
+	});
+}
+*/
 
 // Needed for auto fade
 viewer.addControl( "navigation", { anchor: "NONE" } );
@@ -401,20 +472,29 @@ viewer.addControl( "nav-list-remove", { anchor: "NONE" } );
 viewer.addControl( "nav-list-add", { anchor: "NONE" } );
 
 // Add page number
-viewer.addHandler( 'tile-loaded', function( e ) {
-	if( viewer.referenceStrip ) {
-		for( const [id, v] of Object.entries( viewer.referenceStrip.miniViewers ) ) {
-			var pagenum = 1 + parseInt( id.replace( /^.*-/, '' ) );
-			var page_id = id + "-page";
-			if( !v.getOverlayById( page_id ) ) {
-				var div = document.createElement( 'div' );
-				div.id = page_id;
-				div.classList.add( "pagenum" );
-				div.appendChild( document.createTextNode( pagenum ) );
-				v.addOverlay( div, new OpenSeadragon.Point( 0, 0) );
-			}
-		}
+function v_add_page( id, v ) {
+	var pagenum = 1 + parseInt( id.replace( /^.*-/, '' ) );
+	var page_id = id + "-page";
+	if( !v.getOverlayById( page_id ) ) {
+		var div = document.createElement( 'div' );
+		div.id = page_id;
+		div.className = "pagenum";
+		div.appendChild( document.createTextNode( pagenum ) );
+		v.addOverlay( div, new OpenSeadragon.Point( 0, 0) );
 	}
-})
+}
+function init_add_page () {
+	if( viewer.referenceStrip ) {
+		var proxy = new Proxy( viewer.referenceStrip.miniViewers, {
+			set: function( target, id, v ) {
+				v_add_page( id, v );
+				target[ id ] = v;
+				return true;
+			}
+		});
+		viewer.referenceStrip.miniViewers = proxy;
+		Object.entries( viewer.referenceStrip.miniViewers ).forEach( ([id, v]) => v_add_page( id, v ) );
+	}
+}
 
 }; //onload

@@ -1,8 +1,9 @@
 <?php
 
-// IIIF API Presentation
+echo "/* --- ".basename(__FILE__)." --- */\n";
 
 $url = "$t_base$id_notice/manifest";
+echo "/* URL $url */\n";
 curl_setopt( $ch, CURLOPT_URL, $url );
 $json = curl_exec( $ch );
 
@@ -15,10 +16,36 @@ if( $json === false ) {
 	echo "$url\n$json\n";
 	echo "*/\n";
 } else {
-	$out = json_decode( $json, true )["sequences"][0]["canvases"];
-	foreach( $out as $s ) {
-		echo ' "'.$s["images"][0]["resource"]["service"]["@id"].'/info.json",'."\n";
+
+	$sources = array();
+	$tileSources = array();
+
+	$out = json_decode( $json, true );
+	foreach( $out["sequences"][0]["canvases"] as $s ) {
+		// specific data
+		$source = array();
+		$source["thumb"] = $s["thumbnail"];
+		$source["permalink"] = $s["ligeoPermalink"];
+		$sources[] = $source;
+
+		// OSD data
+		$tileSources[] = $s["images"][0]["resource"]["service"]["@id"]."/info.json";
 	}
+
+	$data["tileSources"] = $tileSources;
+	$data["sources"] = $sources;
+
+	$data["home"] = $home;
+	$data["logo"] = $logo;
+	$data["title"] = $title;
+
+	$data["desc"] = $out["label"];
+
+	if( isset( $filter_title ) ) {
+		$extracted_title = preg_filter( "/.*$filter_title.*/s", "$1", $page );
+		$data["title"] = $extracted_title;
+	}
+
 }
 
 ?>

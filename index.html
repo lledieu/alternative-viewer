@@ -13,9 +13,8 @@ Voulant essayer d'utiliser cette visionneuse, j'ai eu l'idée de faire une alter
 <li>un script pour satisfaire l'API Image Information (retourne info.json)</li>
 <li>un script pour satisfaire l'API Image Requests (retourne une image ou un morceau d'image)</li>
 </ul>
-Quand le site passe le relais à la visionneuse officielle, il fournit deux identifiants <b>id</b> et <b>ir</b>, ce dernier n'étant pas toujours nécessaire. On fournit les mêmes infos à la visionneuse alternative et elle se débrouille avec !
 </p>
-<p>Le site des AD44 utilisant la même mécanique que celui des AD62, il peut profiter de la même visionneuse alternative.</p>
+<p>Les sites des AD44 et AD60 utilisant la même mécanique que celui des AD62, ils peuvent profiter de la même visionneuse alternative.</p>
 
 Exemples :
 <ul>
@@ -29,6 +28,7 @@ Exemples :
 <li>Avec la visionneuse officielle : <a href="https://archives-numerisees.loire-atlantique.fr/v2/ad44/visualiseur/registre.html?ir=10230&id=560693481">Go</a></li>
 <li>Avec la visionneuse alternative : <a href="javascript:fill_AD44();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 </ul>
+<li>AD60 <a href="javascript:fill_AD60();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 </ul>
 
 <form action="alternative-viewer.php" method="get">
@@ -36,14 +36,12 @@ Exemples :
 Site concerné :
 <select id="f1_d" name="d">
  <option value="AD44">AD44</option>
- <option value="AD62" default>AD62</option>
+ <option value="AD60">AD60</option>
+ <option value="AD62" selected>AD62</option>
 </select>
 <br/>
-Identifiant du lot (<b>id</b>) :
-<input id="f1_id" type="number" name="id">
-<br/>
-Autre identifiant (optionnel, <b>ir</b>) :
-<input id="f1_ir" type="number" name="ir">
+URL d'accès à la visionneuse officielle (ou partie identifiant unique du permalien) :
+<input id="f1_pl" type="text" name="pl">
 <br/>
 Page :
 <input id="f1_vue" type="number" name="vue">
@@ -53,6 +51,22 @@ Zoom (x,y,w,h) exprimé en pourcentages (ex.: <b>28,19,21,9</b> sur la vue <b>4<
 <br/>
 <input type="submit" value="Go">
 </div>
+</form>
+
+<p>Même sites en passant par un upload du html de la visionneuse officielle.</p>
+
+<form action="alternative-viewer.php" method="post" enctype="multipart/form-data">
+ <div>
+  Site concerné :
+  <select id="f1_d" name="d">
+   <option value="AD44">AD44</option>
+   <option value="AD60">AD60</option>
+   <option value="AD62" selected>AD62</option>
+  </select>
+  <input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
+  Fichier HTML sauvegardé : <input type="file" name="html" />
+  <input type="submit" value="Go" />
+ </div>
 </form>
 
 <p>Et l'aventure se poursuit avec d'autres sites d'archives qui proposent une recherche globale efficace. Le script suppose que les critèrent permettent de remonter un seul résultat, sinon le comportement est pour l'instant indéterminé. On notera que les AD34 utilisent le protocole IIIF, les AD02 et AD12 le protocole Zoomify. Les AD59 et AD80 sont plus simples, elles fournissent uniquement une image et une vignette.</p>
@@ -66,7 +80,7 @@ Exemples :
 <li>AD59 5 Mi 018 R 005 <a href="javascript:fill_AD59();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 <li>AD80 1MI_EC_238 <a href="javascript:fill_AD80();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 <li>AN LH/2560/60 <a href="javascript:fill_ANLH();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
-<li>AM Valenciennes MS_815 <a href="javascript:fill_AMV();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
+<li>BM Valenciennes MS_815 <a href="javascript:fill_AMV();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 </ul>
 </ul>
 
@@ -138,6 +152,8 @@ Login / mot de passe :
 </div>
 </form>
 
+<p>Si vous disposez d'Apache et PHP (version 7) sur votre PC ou sur votre site, vous pouvez installer <a href="https://github.com/lledieu/alternative-viewer">alternative-viewer</a>.</p>
+
 </body>
 <script>
 function fill_AD02() {
@@ -166,10 +182,9 @@ function fill_AD34() {
 
 function fill_AD44() {
 	document.getElementById("f1_d").value = "AD44";
-	document.getElementById("f1_id").value = "560693481";
-	document.getElementById("f1_ir").value = "10230";
-	document.getElementById("f1_vue").value = "";
-	document.getElementById("f1_zoom").value = "";
+	document.getElementById("f1_pl").value = "https://archives-numerisees.loire-atlantique.fr/v2/ad44/visualiseur/registre.html?ir=10230&id=560693481";
+	document.getElementById("f1_vue").value = "4";
+	document.getElementById("f1_zoom").value = "28,19,21,9";
 }
 
 function fill_AD48() {
@@ -188,10 +203,16 @@ function fill_AD59() {
 	document.getElementById("f2_zoom").value = "";
 }
 
+function fill_AD60() {
+	document.getElementById("f1_d").value = "AD60";
+	document.getElementById("f1_pl").value = "http://ressources.archives.oise.fr/ark:/44803/n89z9qkw30jnkz8q";
+	document.getElementById("f1_vue").value = "";
+	document.getElementById("f1_zoom").value = "";
+}
+
 function fill_AD62() {
 	document.getElementById("f1_d").value = "AD62";
-	document.getElementById("f1_id").value = "236409427";
-	document.getElementById("f1_ir").value = "";
+	document.getElementById("f1_pl").value = "http://archivesenligne.pasdecalais.fr/v2/ad62/visualiseur/registre.html?ir=11363&id=236409427";
 	document.getElementById("f1_vue").value = "";
 	document.getElementById("f1_zoom").value = "";
 }

@@ -1,9 +1,12 @@
 <?php
 
-echo "/* --- BMV --- */\n";
+echo "/* --- ".basename(__FILE__)." --- */\n";
 
-$url = "$base/in/rest/KUModelSVC/TOC?id=".urlencode("h::ark:/29755/".get_param( "c" ));
-echo "/* URL $url */\n";
+$c = get_param( "c" );
+$iid = urlencode( "h::ark:/$ark/$c" );
+$fileIID = urlencode( "ark:/$ark/$c" );
+$url = "$home/in/rest/KUModelSVC/TOC?id=$iid";
+echo "/* URL1 $url */\n";
 
 curl_setopt( $ch, CURLOPT_URL, $url );
 $json = curl_exec( $ch );
@@ -17,10 +20,43 @@ if( $json === false ) {
 	echo "$url\n$json\n";
 	echo "*/\n";
 } else {
-	$out = json_decode( $json, true )["section"];
-	foreach( $out as $s ) {
-		echo ' "CORS/BMV-getTileSource.php?deepZoomManifest=/in'.$s["imageLink"].".dzi\",\n";
+	$sources = array();
+	$tileSources = array();
+
+	$out = json_decode( $json, true );
+	foreach( $out["section"] as $s ) {
+		$numpage = preg_filter( "/.*-([0-9]*)-.*/", "$1", $s['identifier'] );
+
+		// Specific data
+		$source = array();
+		$source["imageLink"] = $s['imageLink'];
+		$source["identifier"] = $s['identifier'];
+		$source["pagination"] = $s['pagination'];
+		//$source["download"] = "$home/in/rest/imageExportSVC/pdf?iid=$iid&attachmentID=".$s['imageLink']."&image=".($numpage -1 )."&fileIID=$fileIID"; // POST + cookie !
+		$source["permalink"] = "$base_ark$c/v".sprintf( "%04d", $numpage );
+		$sources[] = $source;
+
+		// OSD data
+		$tileSources[] = "CORS/BMV-getTileSource.php?deepZoomManifest=/in".$s["imageLink"].".dzi";
 	}
+
+	$data["tileSources"] = $tileSources;
+	$data["sources"] = $sources;
+
+	$data["home"] = $home;
+	$data["logo"] = $logo;
+	$data["title"] = $title;
+
+	// More data
+	$url = "$home/in/rest/api/resolveArk?ark=$fileIID";
+	echo "/* URL2 $url */\n";
+
+	curl_setopt( $ch, CURLOPT_URL, $url );
+	$json = curl_exec( $ch );
+	$out = json_decode( $json, true );
+
+	$data["title"] = $out["collectionData"]["source"];
+	$data["desc"] = $out["resolve"][1]["title"];
 }
 
 ?>
