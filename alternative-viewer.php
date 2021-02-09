@@ -105,7 +105,7 @@ if( $zoom != "" ) {
 	    is_numeric($rz[1]) && $rz[1] >= 0 && $rz[1] <= 100 &&
 	    is_numeric($rz[2]) && $rz[2] >= 0 && $rz[2] <= 100 &&
 	    is_numeric($rz[3]) && $rz[3] >= 0 && $rz[3] <= 100 ) {
-		$data["initialZoom"] = array( 
+		$data["initialZoom"] = array(
 			"x" => ($rz[0]/100),
 			"y" => ($rz[1]/100),
 			"w" => ($rz[2]/100),
