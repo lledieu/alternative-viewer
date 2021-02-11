@@ -9,9 +9,6 @@ echo "/* --- ".basename(__FILE__)." --- */\n";
  *  size
  */
 
-// Autre option à étudier $url = "$home/visualizer/api?arkName=".$id_notice."&uuid=...";
-//  - counts media / group
-//  - positions media / group
 $url = "$home/visualizer/api?arkName=".$id_notice."&end=${size}&group=0&start=0";
 echo "/* URL $url */\n";
 curl_setopt( $ch, CURLOPT_URL, $url );
@@ -55,7 +52,13 @@ if( $json === false ) {
 	$data["logo"] = $logo;
 	$data["title"] = $title;
 
-	$data["desc"] = $out[0]["record"]["referenceCode"][0]." - ".$out[0]["record"]["title"][0];
+	if( isset( $out[0]["record"]["referenceCode"][0] ) && isset( $out[0]["record"]["title"][0] )) {
+		$data["desc"] = $out[0]["record"]["referenceCode"][0]." - ".$out[0]["record"]["title"][0];
+	} else if( isset( $out[0]["record"]["title"][0] ) ) {
+		$data["desc"] = $out[0]["record"]["title"][0];
+	} else if( isset( $out[0]["record"]["referenceCode"][0] ) ) {
+		$data["desc"] = $out[0]["record"]["referenceCode"][0];
+	}
 }
 
 ?>

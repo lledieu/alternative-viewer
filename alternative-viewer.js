@@ -3,6 +3,7 @@
  *
  *  params : manifest
  *            - tileSources : array
+ *            - sources : array
  *            - logo : string
  *            - title : string
  *            - home : string
@@ -386,6 +387,13 @@ viewer.world.addHandler( 'add-item', function(addItemEvent ) {
 	});
 });
 
+// Substitute params
+function substitute( s, data ) {
+	const vars = [...s.matchAll( /{([^}]*)}/g )];
+	vars.forEach( e => s = s.replace( e[0], data[e[1]] ) );
+	return s;
+}
+
 // Manage download link and permalink
 document.getElementById("nav-permalink")["_url"] =  "" ;
 var status_permalink = { 'i': -1, 'xhr': new XMLHttpRequest() };
@@ -397,11 +405,14 @@ viewer.addHandler( 'tile-loaded', function( e ) {
 
 	var src = e.eventSource.source ;
 	if( src.hasOwnProperty('@context') ) { // IIIF
-		document.getElementById("nav-download").href =  src['@id'] + "/full/full/0/native." + src.tileFormat ;
+		document.getElementById("nav-download").href =  src['@id'] + "/full/full/0/default." + src.tileFormat ;
 	} else if( src.url ) {
 		document.getElementById("nav-download").href =  src.url ;
 	} else if( data.download ) {
 		document.getElementById("nav-download").href =  data.download ;
+	} else if( manifest.download ) {
+		var url = manifest.download;
+		document.getElementById("nav-download").href = substitute( url, data ) ;
 	} else {
 		document.getElementById("nav-download").href =  'TODO:';
 	}
@@ -409,11 +420,13 @@ viewer.addHandler( 'tile-loaded', function( e ) {
 	// Permalink
 	if( data.permalink ) {
 		document.getElementById("nav-permalink").href = data.permalink;
+	} else if( manifest.permalink ) {
+		var url = manifest.permalink;
+		document.getElementById("nav-permalink").href = substitute( url, data );
 	} else if( index != status_permalink.i ) {
 		var url = manifest.ajax_pl;
 		if( url ) {
-			const vars = [...url.matchAll( /{([^}]*)}/g )];
-			vars.forEach( e => url = url.replace( e[0], data[e[1]] ) );
+			url = substitute( url, data );
 
 			xhr = status_permalink.xhr;
 			xhr.onreadystatechange = function() {
@@ -433,6 +446,8 @@ viewer.addHandler( 'tile-loaded', function( e ) {
 			xhr.send( null );
 			status_permalink.i = index;
 			document.getElementById("nav-permalink").href =  "loading:" ;
+		} else {
+			document.getElementById("nav-permalink").href =  "TODO:" ;
 		}
 	}
 });

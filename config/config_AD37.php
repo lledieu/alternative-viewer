@@ -1,8 +1,8 @@
 <?php
-$home = "https://archives.somme.fr";
-$logo = "$home/assets/src/Custom/assets/static/front/favicons/apple-touch-icon.ac035e7c475f9df317e6036d6800dafe.png";
-$title = "Archives départementales de la Somme";
-$ark = "58483";
+$home = "https://archives.touraine.fr";
+$logo = "$home/assets/src/Custom/assets/static/front/img/icono-logo/logo-touraine-departement.1c4dd4b65855b16a88e04da3b3881270.png";
+$title = "Archives départementales d'Indre-et-Loire";
+$ark = "37621";
 
 // Switch
 $l = get_param( "l" );

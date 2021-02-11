@@ -2,6 +2,9 @@
 
 echo "/* --- ".basename(__FILE__)." --- */\n";
 
+$sources = array();
+$tileSources = array();
+
 $url = "$t_base$id_notice/0";
 echo "/* URL STEP 1 : $url */\n";
 curl_setopt( $ch, CURLOPT_URL, $url );
@@ -35,16 +38,20 @@ if( $page === false ) {
 	} else if( preg_match( '/Invalid/', $json ) ) {
 		echo "/* STEP 2bis\n$url\n$json\n*/\n";
 	} else {
-		$sources = array();
-		$tileSources = array();
-
 		$out = json_decode( $json, true );
 		foreach( $out["items"] as $s ) {
 			// specific data
 			$source = array();
 			$source["thumb"] = $s["thumb"];
 			$source["source"] = $s["source"];
-			$source["download"] = $home.$s["printable"];
+			if( isset( $s["downloadable"] ) ) {
+				$source["download"] = $s["downloadable"];
+			} else if( isset( $s["printable"] ) ) {
+				$source["download"] = $s["printable"];
+			}
+			if( substr( $source["download"], 0, 1 ) == "/" ) {
+				$source["download"] = $home.$source["download"];
+			}
 			$source["permalink"] = $s["permalink"];
 			$sources[] = $source;
 
@@ -52,10 +59,6 @@ if( $page === false ) {
 			$tileSources[] = "$z_base/cgi-bin/iipsrv.fcgi?zoomify=".$s["source"]."/ImageProperties.xml";
 		}
 
-		$data["tileSources"] = $tileSources;
-		$data["sources"] = $sources;
-
-		$data["home"] = $home;
 		$data["desc"] = $out["batch"]["title"];
 
 		if( isset( $filter_title ) ) {
@@ -64,5 +67,10 @@ if( $page === false ) {
 		}
 	}
 }
+
+$data["tileSources"] = $tileSources;
+$data["sources"] = $sources;
+
+$data["home"] = $home;
 
 ?>

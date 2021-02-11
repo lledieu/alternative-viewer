@@ -2,6 +2,9 @@
 
 echo "/* --- ".basename(__FILE__)." --- */\n";
 
+$sources = array();
+$tileSources = array();
+
 $pl = get_param( 'pl' );
 if( "" == $pl ) {
 	// uploaded file
@@ -51,9 +54,7 @@ if( $page !== false ) {
 
 	//echo "/*\n$page\n*/\n";
 
-	$sources = array();
-	$tileSources = array();
-	$res = preg_match_all( '/<img src="[^"]*" width="[^"]*" height="[^"]*" id="[^"]*" class="[^"]*" data-type="IMG" data-original="([^"]*)"\/>/', $page, $out, PREG_SET_ORDER );
+	$res = preg_match_all( '/<img src="[^"]*" width="[^"]*" height="[^"]*" id="[^"]*" class="[^"]*" data-type="IMG" data-original="([^"]*)"/', $page, $out, PREG_SET_ORDER );
 	if( $res !== null ) {
 		foreach( $out as $r ) {
 			// specific data
@@ -65,12 +66,19 @@ if( $page !== false ) {
 			$tileSources[] = "simuIIIF/info_json.php?i=".$r[1];
 		}
 	}
-	$data["tileSources"] = $tileSources;
-	$data["sources"] = $sources;
 
-	$data["home"] = $home;
+	if( isset( $filter_vue ) ) {
+		$extracted_vue = preg_filter( "/.*$filter_vue.*/s", "$1", $page );
+		if( $extracted_vue > 1 ) {
+			$data["current-index"] = $extracted_vue - 1;
+		}
+	}
+
 	if( isset( $pl_active ) && $pl_active == false) {
 		// Desactivated (not working)
+
+		// For current-index only, it is possible to switch to official viewer
+		$sources[$data["current-index"]]["permalink"] = $url;
 	} else {
 		$data["ajax_pl"] = "simuIIIF/permalien.php?i={data-original}&pl=".urlencode($url);
 	}
@@ -91,13 +99,6 @@ if( $page !== false ) {
 		$data["title"] = $extracted_title;
 	}
 
-	if( isset( $filter_vue ) ) {
-		$extracted_vue = preg_filter( "/.*$filter_vue.*/s", "$1", $page );
-		if( $extracted_vue > 1 ) {
-			$data["current-index"] = $extracted_vue - 1;
-		}
-	}
-
 	if( isset( $filter_desc ) ) {
 		$extracted_desc = preg_filter( "/.*$filter_desc.*/s", "$1", $page );
 		$extracted_desc = str_replace( "\n", "", $extracted_desc );
@@ -107,6 +108,21 @@ if( $page !== false ) {
 		}
 		$data["desc"] = $extracted_desc;
 	}
+
+	if( 1 == preg_match( "/<p class='error'>([^<]*)<\/p>/", $page, $out ) ) {
+		$data["desc"] = $out[1];
+	}
+	if( 1 == preg_match( '/"bobcmn"/', $page ) ) {
+		$data["desc"] = "\u{261A} \"Enregistrer la cible du lien sous\" puis utilisez l'upload ! Sinon suivez le lien vers la visionneuse officielle...";
+		$home = $url;
+		$data["logo"] = "https://icon-library.net/images/denied-icon/denied-icon-28.jpg";
+		$data["title"] = "Le firewall veut des cookies...";
+	}
 }
+
+$data["tileSources"] = $tileSources;
+$data["sources"] = $sources;
+
+$data["home"] = $home;
 
 ?>

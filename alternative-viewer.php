@@ -140,7 +140,7 @@ if( $data["current-index"] >= count( $data["tileSources"] ) ) {
 }
 
 // Export data as JSON
-echo "var manifest = ".json_encode( $data ).";\n";
+echo "var manifest = ".json_encode( $data, JSON_PRETTY_PRINT ).";\n";
 
 ?>
 </script>
@@ -149,6 +149,7 @@ echo "var manifest = ".json_encode( $data ).";\n";
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="<?php echo file_with_md5( "openseadragon-zoomify.js" ); ?>"></script>
 <script src="<?php echo file_with_md5( "openseadragon-topview.js" ); ?>"></script>
+<script src="<?php echo file_with_md5( "openseadragon-mnesys.js" ); ?>"></script>
 <!-- -->
 <script src="<?php echo file_with_md5( "alternative-viewer.js" ); ?>"></script>
 </html>

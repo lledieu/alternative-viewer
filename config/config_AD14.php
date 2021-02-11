@@ -1,8 +1,8 @@
 <?php
-$home = "https://archives.somme.fr";
-$logo = "$home/assets/src/Custom/assets/static/front/favicons/apple-touch-icon.ac035e7c475f9df317e6036d6800dafe.png";
-$title = "Archives départementales de la Somme";
-$ark = "58483";
+$home = "https://archives.calvados.fr";
+$logo = "$home/assets/src/Custom/assets/static/front/img/icono-logo/logo.50fcef5475bb4b6b30e0b45da3dc7192.png";
+$title = "Archives départementales du calvados";
+$ark = "52329";
 
 // Switch
 $l = get_param( "l" );
@@ -17,8 +17,6 @@ if( $c != "" ) { // A criteria is provided
 	$t_mode = "API";
 } else if( $l != "" ) { // A link is provided
 	$step1 = "preAPI";
-	// Old links
-	$reload_filter = ".*ark:\/$ark\/[^\/]*\/[^\/]*\/[^\/]*$";
 	// New links : arkName / uuid
 	$filter = ".*ark:\/$ark\/([^\/]*)\/([^\/]*)$";
 } else { // Not expected

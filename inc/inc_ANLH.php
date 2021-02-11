@@ -2,6 +2,9 @@
 
 echo "/* --- ".basename(__FILE__)." --- */\n";
 
+$sources = array();
+$tileSources = array();
+
 $c = get_param('c');
 $url = "$s_url_prefix$c$s_url_suffix";
 echo "/* URL $url */\n";
@@ -14,9 +17,6 @@ if( $page === false ) {
 	echo curl_error( $ch )."\n";
 	echo "*/\n";
 } else {
-	$sources = array();
-	$tileSources = array();
-
 	$res = preg_match_all( "/$s_filter/s", $page, $out, PREG_SET_ORDER );
 	if( $res != null ) {
 		foreach( $out as $s ) {
@@ -39,15 +39,14 @@ if( $page === false ) {
 			$tileSources[] = $tileSource;
 		}
 	}
-
-	$data["tileSources"] = $tileSources;
-	$data["sources"] = $sources;
-
-	$data["home"] = $home;
-	$data["logo"] = $logo;
-	$data["title"] = $title;
-
-	$data["desc"] = $c;
 }
+
+$data["tileSources"] = $tileSources;
+$data["sources"] = $sources;
+
+$data["home"] = $home;
+$data["logo"] = $logo;
+$data["title"] = $title;
+$data["desc"] = $c;
 
 ?>

@@ -3,6 +3,17 @@
 echo "/* --- ".basename(__FILE__)." --- */\n";
 
 $c = get_param( "c" );
+if( 1 == preg_match( '|^([^/]*/[^/]*)/v([0-9]*)$|', $c, $out ) ) {
+	$c= $out[1];
+	$data["current-index"] = $out[2] - 1;
+} else  if( 1 == preg_match( '|^([^/]*/[^/]*)$|', $c, $out ) ) {
+	$c= $out[1];
+} else {
+	echo "/* Invalid prama c $c */ \n";
+	http_response_code(404);
+	die;
+}
+
 $iid = urlencode( "h::ark:/$ark/$c" );
 $fileIID = urlencode( "ark:/$ark/$c" );
 $url = "$home/in/rest/KUModelSVC/TOC?id=$iid";
