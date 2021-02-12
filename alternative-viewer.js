@@ -13,7 +13,7 @@
 
 window.onload = function() {
 
-const viewer = OpenSeadragon({
+const options = {
 	id: "alternative-viewer",
 	prefixUrl: "https://cdn.jsdelivr.net/npm/openseadragon@2.4/build/openseadragon/images/",
 	sequenceMode: true,
@@ -25,7 +25,15 @@ const viewer = OpenSeadragon({
 	maxZoomPixelRatio: 5,
 	initialPage: manifest["current-index"],
 	tileSources: manifest.tileSources
-});
+};
+
+if( manifest.SESSION_ID ) {
+	options.ajaxWithCRedentials = true;
+	options.loadTilesWithAjax = true;
+	options.ajaxHeaders = { "SESSION_ID": manifest.SESSION_ID };
+}
+
+const viewer = OpenSeadragon( options );
 
 // Init logo
 function init_logo() {
@@ -488,7 +496,7 @@ viewer.addControl( "nav-list-add", { anchor: "NONE" } );
 
 // Add page number
 function v_add_page( id, v ) {
-	var pagenum = 1 + parseInt( id.replace( /^.*-/, '' ) );
+	var pagenum = 1 + parseInt( id.replace( /^.*-/, '' ), 10 );
 	var page_id = id + "-page";
 	if( !v.getOverlayById( page_id ) ) {
 		var div = document.createElement( 'div' );

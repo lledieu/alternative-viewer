@@ -1,7 +1,5 @@
 <?php
 $home = "https://www.archives49.fr";
-//$logo = "https://www.archinoe.fr/v2/ad49/images/logo.png";
-//$title = "Archives départementales du Maine-et-Loire";
 $ark = "71821";
 
 // Extraction from official viewer page

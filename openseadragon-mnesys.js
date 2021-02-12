@@ -42,7 +42,7 @@ $.extend($.MnesysTileSource.prototype, $.TileSource.prototype, {
 						if( name == "z" ) {
 							layer[name] = parseFloat( c.attributes[i].value );
 						} else {
-							layer[name] = parseInt( c.attributes[i].value );
+							layer[name] = parseInt( c.attributes[i].value, 10 );
 						}
 					}
 

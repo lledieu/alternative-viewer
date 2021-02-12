@@ -6,6 +6,7 @@ $sources = array();
 $tileSources = array();
 
 $c = get_param('c');
+$c = preg_replace( '|/0*|', '/', $c );
 $url = "$s_url_prefix$c$s_url_suffix";
 echo "/* URL $url */\n";
 curl_setopt( $ch, CURLOPT_URL, $url );
