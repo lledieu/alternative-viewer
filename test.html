@@ -65,27 +65,44 @@
 var manifest = {
 	"current-index": 0,
 	"tileSources": [
-		"CORS/AGR-topview.json.php?FIF=514/514_0549_000/514_0549_000_01097_000/514_0549_000_01097_000_0_0001.jp2",
-		"CORS/AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0001.jp2",
-		"CORS/AGR-topview.json.php?FIF=527/527_0236_000/527_0236_000_01392_000/527_0236_000_01392_000_0_0003.jp2",
-		"CORS/mnesys-proxy.php?url=https://archives.eure.fr/medias/customer_2/etatcivil/8MI0204/AD02701_8MI0204N0260_jpg_/p.xml",
+		{
+			"type": "image",
+			"url": "https:\/\/archivesdepartementales.lenord.fr\/images\/a7368895-739d-4608-8e55-562f31551480.jpg",
+			"referenceStripThumbnailUrl": "https:\/\/archivesdepartementales.lenord.fr\/images\/a7368895-739d-4608-8e55-562f31551480_thumbnail.jpg",
+			"buildPyramid": false
+		},
 	],
 	"sources": [
-		{ "permalink": "vide:", "download": "vide:"},
-		{ "permalink": "vide:", "download": "vide:"},
-		{ "permalink": "vide:", "download": "vide:"},
-		{ "permalink": "vide:", "download": "vide:"},
+		{
+			"permalink": "https://archivesdepartementales.lenord.fr/ark:/33518/l3vsrz274ktf/a7368895-739d-4608-8e55-562f31551480",
+			"download": "https://archivesdepartementales.lenord.fr/images/a7368895-739d-4608-8e55-562f31551480.jpg",
+			"highligth": [
+				{ "prenom": "Augustin", "nom": "LEDIEU", "oc": 2, "zones": [ {x:0.38, y:0.07, w:0.11, h:0.02} ] },
+				{ "prenom": "Toussaint", "nom": "LEDIEU", "oc": 2, "zones": [ {x:0.20, y:0.13, w:0.10, h:0.02} ] },
+				{ "prenom": "Marie Thérèse", "nom": "LEDIEU", "oc": 0, "zones": [ {x:0.33, y:0.13, w:0.12, h:0.02} ] },
+				{ "prenom": "Catherine", "nom": "PRUVOT", "oc": 1, "zones": [ {x:0.41, y:0.15, w:0.08, h:0.01}, {x:0.06, y:0.17, w:0.05, h:0.02} ] },
+				{ "prenom": "Vincent", "nom": "PRUVOT", "oc": 0, "zones": [ {x:0.38, y:0.18, w:0.08, h:0.02} ] },
+				{ "prenom": "Marie Jeanne", "nom": "MONFROY", "oc": 2, "zones": [ {x:0.34, y:0.20, w:0.12, h:0.02} ] },
+				{ "prenom": "Toussaint", "nom": "LEDIEU", "oc": 2, "zones": [ {x:0.16, y:0.46, w:0.09, h:0.02} ] },
+				{ "prenom": "Pierre Joseph", "nom": "RICHEZ", "oc": 0, "zones": [ {x:0.23, y:0.48, w:0.10, h:0.02} ] },
+				{ "prenom": "Bernardin", "nom": "MONFROY", "oc": 0, "zones": [ {x:0.42, y:0.49, w:0.07, h:0.02}, {x:0.07, y:0.52, w:0.05, h:0.02} ] },
+				{ "prenom": "Jean Baptiste", "nom": "PRUVOT", "oc": 4, "zones": [ {x:0.28, y:0.53, w:0.11, h:0.03} ] },
+			],
+		},
 	],
-	"home": "#",
-	"logo": "broken",
-	"title": "Site de test",
-	"desc": "Page de test",
+	"home": "https://archivesdepartementales.lenord.fr",
+	"logo": "https://archivesdepartementales.lenord.fr/assets/src/Custom/assets/static/front/img/icono-logo/logo-header.6e77bd3ad3f5b75a6c5e58d94199314d.png",
+	"title": "Archives départementales du Nord",
+	"desc": "5 Mi 015 R 047 - POMMEREUIL / NMD [1812-1852]",
+	"hl-href": "https://lledieu.org/?n={nom}&p={prenom}&oc={oc}",
+/*
 	"initialZoom": {
 		"x" : 0.5,
 		"y" : 0.5,
 		"w" : 0.25,
 		"h" : 0.25
-	}
+	},
+*/
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/openseadragon@2.4/build/openseadragon/openseadragon.min.js"></script>

@@ -30,7 +30,9 @@ const options = {
 if( manifest.SESSION_ID ) {
 	options.ajaxWithCRedentials = true;
 	options.loadTilesWithAjax = true;
-	options.ajaxHeaders = { "SESSION_ID": manifest.SESSION_ID };
+	options.ajaxHeaders = {
+		"SESSION_ID": manifest.SESSION_ID
+	};
 }
 
 const viewer = OpenSeadragon( options );
@@ -402,7 +404,7 @@ function substitute( s, data ) {
 	return s;
 }
 
-// Manage download link and permalink
+// Manage download link and permalink and highlights
 document.getElementById("nav-permalink")["_url"] =  "" ;
 var status_permalink = { 'i': -1, 'xhr': new XMLHttpRequest() };
 viewer.addHandler( 'tile-loaded', function( e ) {
@@ -458,11 +460,47 @@ viewer.addHandler( 'tile-loaded', function( e ) {
 			document.getElementById("nav-permalink").href =  "TODO:" ;
 		}
 	}
+
+	// Manage highlights
+	if( data.highligth ) {
+		data.highligth.forEach( function( e ) {
+			let href = manifest["hl-href"];
+			href = substitute( href, e );
+			let msg = e.prenom + " " + e.nom;
+
+			e.zones.forEach( function( z ) {
+				// Overlay for highligth
+				let zone = document.createElement( 'div' );
+				zone.className = "highlight";
+				viewer.addOverlay( zone, new OpenSeadragon.Rect( z.x, z.y, z.w, z.h ) );
+
+				let tooltip = document.createElement( 'span' );
+				tooltip.className = "tooltiptext"
+				tooltip.textContent = msg;
+				zone.appendChild( tooltip );
+
+				// MouseTracker for link
+				new OpenSeadragon.MouseTracker({
+					element: zone,
+					clickHandler: function() {
+						window.open( href, '_blank' );
+					},
+					enterHandler() {
+						zone.classList.add( "hover" );
+					},
+					exitHandler() {
+						zone.classList.remove( "hover" );
+					}
+				});
+			});
+
+		});
+	}
 });
 
 // Manage initial zoom
 if( manifest.initialZoom ) {
-	viewer.world.addOnceHandler( 'add-item', function(addItemEvent ) {
+	viewer.world.addOnceHandler( 'add-item', function( addItemEvent ) {
 		var tiledImage = addItemEvent.item;
 		tiledImage.addOnceHandler('fully-loaded-change', function(fullyLoadedChangeEvent) {
 			var zone = document.createElement( 'div' );
@@ -471,21 +509,6 @@ if( manifest.initialZoom ) {
 		});
 	});
 }
-
-// Manage initial highlight
-/*
-if( param_initialHighlight ) {
-	viewer.world.addOnceHandler( 'add-item', function(addItemEvent ) {
-		var tiledImage = addItemEvent.item;
-		tiledImage.addOnceHandler('fully-loaded-change', function(fullyLoadedChangeEvent) {
-			var zone = document.createElement( 'div' );
-			zone.className = "highlight";
-			zone.setAttribute( "title", "Message" );
-			viewer.addOverlay( zone, new OpenSeadragon.Rect( param_initialHighlight.x, param_initialHighlight.y, param_initialHighlight.w, param_initialHighlight.h ) );
-		});
-	});
-}
-*/
 
 // Needed for auto fade
 viewer.addControl( "navigation", { anchor: "NONE" } );
