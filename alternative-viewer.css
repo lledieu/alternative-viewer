@@ -3,9 +3,12 @@
  */
 
 body, #alternative-viewer {
-	height: 100vh;
-	width: 100vw;
 	margin: 0;
+}
+#alternative-viewer {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
 }
 
 /* Logo */
@@ -33,7 +36,7 @@ body, #alternative-viewer {
 #navigation {
 	font-size: 15px;
 	background-color: #e4e4e4;
-	position: fixed;
+	position: absolute;
 	left: 50%;
 	top: 0;
 	transform: translate(-50%, 0);
@@ -68,7 +71,7 @@ body, #alternative-viewer {
 .nav-bar {
 	color: black;
 	background-color: #e4e4e4;
-	position: fixed;
+	position: absolute;
 	z-index: 5;
 	font-size: 30px;
 	text-align: center;
@@ -143,7 +146,7 @@ a.flat, a.flat:hover, a.flat:focus, .flat:active, .flat:visited {
 
 /* Github */
 #github {
-	position: fixed;
+	position: absolute;
 	right: 0;
 	bottom: 0;
 	z-index: 5;

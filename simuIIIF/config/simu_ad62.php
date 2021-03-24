@@ -1,3 +1,3 @@
 <?php
-$base = "http://archivesenligne.pasdecalais.fr";
+$base = "https://archivesenligne.pasdecalais.fr";
 ?>
