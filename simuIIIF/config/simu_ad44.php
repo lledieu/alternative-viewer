@@ -1,3 +1,3 @@
 <?php
-$base = "https://www.archinoe.fr";
+$base = "https://archives-numerisees.loire-atlantique.fr";
 ?>

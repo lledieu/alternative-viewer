@@ -20,6 +20,7 @@ $url = "$home/in/rest/KUModelSVC/TOC?id=$iid";
 echo "/* URL1 $url */\n";
 
 curl_setopt( $ch, CURLOPT_URL, $url );
+curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
 $json = curl_exec( $ch );
 
 if( $json === false ) {

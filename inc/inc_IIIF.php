@@ -24,8 +24,12 @@ if( $json === false ) {
 	foreach( $out["sequences"][0]["canvases"] as $s ) {
 		// specific data
 		$source = array();
-		$source["thumb"] = $s["thumbnail"];
-		$source["permalink"] = $s["ligeoPermalink"];
+		if( array_key_exists( "thumbmail", $s ) ) {
+			$source["thumb"] = $s["thumbnail"];
+		}
+		if( array_key_exists( "ligeoPermalink", $s ) ) {
+			$source["permalink"] = $s["ligeoPermalink"];
+		}
 		$sources[] = $source;
 
 		// OSD data

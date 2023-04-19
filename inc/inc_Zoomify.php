@@ -25,7 +25,7 @@ if( $page === false ) {
 		$data["logo"] = $logo;
 	}
 
-	$url = preg_filter( '/.*Binocle\({"source":"([^"]*.json).*/s', '$1', $page );
+	$url = preg_filter( '/.*Binocle\({.*"source":"([^"]*.json).*/s', '$1', $page );
 	$url = preg_replace( '/\\\\/', '', $url );
 	echo "/* URL STEP 2 : $url */\n";
 

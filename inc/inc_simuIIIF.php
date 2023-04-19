@@ -54,7 +54,7 @@ if( $page !== false ) {
 
 	//echo "/*\n$page\n*/\n";
 
-	$res = preg_match_all( '/<img src="[^"]*" width="[^"]*" height="[^"]*" id="[^"]*" class="[^"]*" data-type="IMG" data-original="([^"]*)"/', $page, $out, PREG_SET_ORDER );
+	$res = preg_match_all( '/<img src="[^"]*" width="[^"]*" height="[^"]*" id="[^"]*" class="[^"]*" data-type="IMG"[ \t\r\n]*data-original="([^"]*)"/', $page, $out, PREG_SET_ORDER );
 	if( $res !== null ) {
 		foreach( $out as $r ) {
 			// specific data
