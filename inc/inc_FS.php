@@ -6,13 +6,16 @@ $sources = array();
 $tileSources = array();
 
 $dgsNum = get_param( "dgsNum" );
-$fssessionid = get_param( "fssessionid" );
-$url = "http://home.lledieu.org/OSD/CORS/FS-proxy.php?dgsNum=$dgsNum";
+if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+	$url = "https://";
+} else {
+	$url = "http://";
+}
+$url .= $_SERVER['HTTP_HOST'];
+$url .= substr( $_SERVER['REQUEST_URI'], 0, strrpos( $_SERVER['REQUEST_URI'], "/" ) + 1 );
+$url .= "CORS/FS-proxy.php?dgsNum=$dgsNum";
 echo "/* URL : $url */\n";
 
-curl_setopt( $ch, CURLOPT_HTTPHEADER, array(
-	"SESSION_ID: $fssessionid",
-) );
 curl_setopt( $ch, CURLOPT_URL, $url );
 
 $json = curl_exec( $ch );
@@ -24,6 +27,7 @@ if( $json === false ) {
 	foreach( $out["images"] as $s ) {
 		// specific data
 		$source = array();
+		$source["permalink"] = str_replace( "/image.xml", "", $s );
 		$sources[] = $source;
 
 		// OSD data
@@ -40,6 +44,7 @@ $data["home"] = $home;
 $data["logo"] = $logo;
 $data["title"] = $title;
 
+$fssessionid = get_param( "fssessionid" );
 $data["SESSION_ID"] = $fssessionid;
 
 ?>

@@ -69,7 +69,7 @@ Zoom (x,y,w,h) exprimé en pourcentages (ex.: <b>28,19,21,9</b> sur la vue <b>4<
  </div>
 </form>
 
-<p>Et l'aventure se poursuit avec d'autres sites d'archives qui proposent une recherche globale efficace. Le script suppose que les critèrent permettent de remonter un seul résultat, sinon le comportement est pour l'instant indéterminé. On notera que les AD34 utilisent le protocole IIIF, les AD02 et AD12 le protocole Zoomify. Les AD59 et AD80 sont plus simples, elles fournissent uniquement une image et une vignette.</p>
+<p>Et l'aventure se poursuit avec d'autres sites d'archives qui proposent une recherche globale efficace. Le script suppose que les critèrent permettent de remonter un seul résultat, sinon le comportement est pour l'instant indéterminé. On notera que les AD02 et AD34 utilisent le protocole IIIF, les AD12 et AD48 le protocole Zoomify. Les AD59 et AD80 sont plus simples, elles fournissent uniquement une image et une vignette.</p>
 
 Exemples :
 <ul>
@@ -79,7 +79,6 @@ Exemples :
 <li>AD48 (EC) EDT 125 GG 1 (Pour la période 1692-1710) <a href="javascript:fill_AD48();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 <li>AD59 5 Mi 018 R 005 <a href="javascript:fill_AD59();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 <li>AD80 1MI_EC_238 <a href="javascript:fill_AD80();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
-<li>AN LH/2560/60 <a href="javascript:fill_ANLH();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 <li>BM Valenciennes MS_815 <a href="javascript:fill_AMV();">Remplir le formulaire</a> (il restera à appuyer sur le bouton Go en bas du formulaire)</li>
 </ul>
 </ul>
@@ -94,7 +93,6 @@ Site concerné :
  <option value="AD48">AD48</option>
  <option value="AD59">AD59</option>
  <option value="AD80">AD80</option>
- <option value="ANLH">AN LH</option>
  <option value="BMV">BM Valenciennes</option>
 </select>
 <br/>
@@ -119,6 +117,21 @@ Zoom (x,y,w,h) exprimé en pourcentages :
 <input type="submit" value="Go">
 </div>
 </form>
+
+<p><form action="alternative-viewer.php" method="get">
+Base Léonore :<br/>
+<input type="hidden" name="d" value="ANLH">
+Id de la notice :
+<input id="f4_c" type="text" name="id" value="349790">
+<br/>
+Page :
+<input id="f4_vue" type="number" name="vue">
+<br/>
+Zoom (x,y,w,h) exprimé en pourcentages :
+<input id="f4_zoom" type="text" name="zoom">
+<br/>
+<input type="submit" value="Go">
+</form></p>
 
 <p>Pour les Archives Générales du Royaume (Belgique), il est nécessaire de fournir login et mot de passe pour pouvoir lister le contenu d'un lot. Par contre la consultation des images est possible sans session. Un lot est identifié par 2 valeurs : eadid et inventarisnr.</p>
 
@@ -147,6 +160,27 @@ Login / mot de passe :
 <input type="text" name="login">
 /
 <input type="password" name="passwd">
+<br/>
+<input type="submit" value="Go">
+</div>
+</form>
+
+<p>Pour FamilySearch, il est nécessaire de disposer d'un cookie fssession valide et de contourner des restrictions de sécurité... mais j'y suis arrivé !</p>
+
+<form action="alternative-viewer.php" method="post">
+<div>
+<input type="hidden" name="d" value="FS">
+N° de film (DGS) :
+<input id="f5_dgsNum" type="text" name="dgsNum" value="008892147">
+<br/>
+Cookie fssessionid :
+<input id="f5_fssessionid" type="text" name="fssessionid" size="40" placeholder="89cb651c-6556-4477-ad8d-4dcf500993c6-prod">
+<br/>
+Page :
+<input id="f5_vue" type="number" name="vue" value="100">
+<br/>
+Zoom (x,y,w,h) exprimé en pourcentages :
+<input id="f5_zoom" type="text" name="zoom" value="60,9,36,51">
 <br/>
 <input type="submit" value="Go">
 </div>

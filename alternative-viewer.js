@@ -31,11 +31,11 @@ if( manifest.SESSION_ID ) {
 	options.ajaxWithCRedentials = true;
 	options.loadTilesWithAjax = true;
 	options.ajaxHeaders = {
-		"SESSION_ID": manifest.SESSION_ID
+		"X-Session-Id": manifest.SESSION_ID
 	};
 }
 
-const viewer = OpenSeadragon( options );
+var viewer = OpenSeadragon( options );
 
 // Init logo
 function init_logo() {
@@ -283,6 +283,10 @@ new OpenSeadragon.MouseTracker({
 		viewer.updateOverlay( drag.overlayElement, location );
 	},
 	releaseHandler: function( event ) {
+		if( !drag ) {
+			return;
+		}
+
 		var rect = viewer.getOverlayById( drag.overlayElement ).getBounds( viewer.viewport );
 
 		document.getElementById("nav-zone")._last =
