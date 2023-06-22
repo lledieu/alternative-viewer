@@ -12,7 +12,7 @@ if( $c != "" ) { // A criteria is provided
 	$s_url_prefix = "$home/search/results?q=%22";
 	$s_url_suffix = "%22&scope=all";
 	$s_filter = "\/ark:\/$ark\/([^\/\"]*)\/";
-	$s_filter_count = ' ([0-9]*) medias';
+	$s_filter_count = ' ([0-9]*) medias?';
 	// Next step
 	$t_mode = "API";
 } else if( $l != "" ) { // A link is provided
